@@ -7,21 +7,25 @@
 
     @using (var form = Html.BeginForm(FormMethod.Post))
     {
-        @Html.ValidationSummary(true)
+        @Html.ValidationSummary(true) @* doesn't work *@
         
         <p>
-            <label>@Html.DisplayNameFor(Model => Model.EmailAddress)</label>
-            @Html.TextBoxFor(Model => Model.EmailAddress)
+            <label>@Html.DisplayNameFor(model => model.EmailAddress)</label>
+            @Html.TextBoxFor(model => model.EmailAddress)
+            @Html.ValidationMessageFor(model => model.EmailAddress)
         </p>
         <p>
-            <label>@Html.DisplayNameFor(Model => Model.Password)</label>
-            @Html.PasswordFor(Model => Model.Password)
+            <label>@Html.DisplayNameFor(model => model.Password)</label>
+            @Html.PasswordFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
         </p>
         <p>
-            <label>@Html.DisplayNameFor(Model => Model.PasswordAgain)</label>
-            @Html.PasswordFor(Model => Model.PasswordAgain)
+            <label>@Html.DisplayNameFor(model => model.PasswordAgain)</label>
+            @Html.PasswordFor(model => model.PasswordAgain)
+            @Html.ValidationMessageFor(model => model.PasswordAgain)
         </p>
 
         <input type="submit" name="RegisterButton" value="Register" />
     }
+
 </div>
