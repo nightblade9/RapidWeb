@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Stocks.Web.Pages;
+namespace Stocks.Web.Pages.Authentication;
 
-public class IndexModel : PageModel
+public class LoginModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public LoginModel(ILogger<IndexModel> logger)
     {
         _logger = logger;
     }
