@@ -26,4 +26,9 @@ public class RegisterModel : PageModel
     {
 
     }
+
+    public void OnPost(string emailAddress, string password, string passwordAgain)
+    {
+        ;
+    }
 }
