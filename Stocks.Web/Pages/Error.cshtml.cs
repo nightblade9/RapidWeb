@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Stocks.Web.Pages;
@@ -17,6 +18,13 @@ public class ErrorModel : PageModel
     public ErrorModel(ILogger<ErrorModel> logger)
     {
         _logger = logger;
+    }
+
+    public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
+    {
+        base.OnPageHandlerExecuted(context);
+
+        ViewData["Title"] = "Error";
     }
 
     public void OnGet()
