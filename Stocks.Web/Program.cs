@@ -1,11 +1,30 @@
+using System.Text.Json.Serialization;
+using MySqlConnector;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages(options => {
-    options.Conventions.AddPageRoute("/Index", "index");
-    options.Conventions.AddPageRoute("/Authentication/Login", "login");
-    options.Conventions.AddPageRoute("/Authentication/Register", "register");
-});
+
+// Routing
+{
+    builder.Services.AddRazorPages(options => {
+        options.Conventions.AddPageRoute("/Index", "index");
+        options.Conventions.AddPageRoute("/Authentication/Login", "login");
+        options.Conventions.AddPageRoute("/Authentication/Register", "register");
+    });
+}
+
+// add services to DI container
+{
+    var services = builder.Services;
+    services.AddCors();
+}
+
+// DB config
+{
+    builder.Services.AddTransient(x =>
+        new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
+}
 
 var app = builder.Build();
 
