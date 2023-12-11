@@ -1,2 +1,2 @@
-# StocksSpectator
-Tiny web application to replace the huge spreadsheet we have to track our stocks
+# Stocks Spectator
+Tiny web application that manages and tracks your stocks over time, across multiple accounts.
