@@ -15,3 +15,5 @@ Download the following:
     - Launch the workbench, connect, and create a new schema called `Stocks`
 
 Open the source project and press F5 in VS Code; it should run and show the dashboard.
+
+Browse to `/HealthCheck` and verify that the database connection check shows `Successful`.

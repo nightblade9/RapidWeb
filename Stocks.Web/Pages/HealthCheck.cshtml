@@ -3,13 +3,11 @@
 
 <div class="text-center">
     <h1 class="display-4">Health Checks</h1>
-
-    <p>
-        <ul>
-        @foreach (var kvp in Model.HealthCheckSuccessful)
-        {
-            <li>@(kvp.Key) => @(kvp.Value == true ? "Successful" : "Failed")</li>
-        }
-        </ul>
-    </p>
 </div>
+
+<ul>
+@foreach (var kvp in Model.HealthCheckSuccessful)
+{
+    <li>@(kvp.Key) => @(kvp.Value == true ? "Successful" : "Failed")</li>
+}
+</ul>

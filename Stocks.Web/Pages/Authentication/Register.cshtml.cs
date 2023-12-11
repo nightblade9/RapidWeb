@@ -5,6 +5,10 @@ namespace Stocks.Web.Pages.Authentication;
 
 public class RegisterModel : PageModel
 {
+    public string EmailAddress { get; set; }
+    public string Password { get; set; }
+    public string PasswordAgain { get; set; }
+    
     private readonly ILogger<IndexModel> _logger;
 
     public RegisterModel(ILogger<IndexModel> logger)

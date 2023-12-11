@@ -1,3 +1,27 @@
 @page
 @model RegisterModel
 
+
+<div class="text-center">
+    <h1 class="display-4">Register</h1>
+
+    @using (var form = Html.BeginForm(FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        
+        <p>
+            <label>@Html.DisplayNameFor(Model => Model.EmailAddress)</label>
+            @Html.TextBoxFor(Model => Model.EmailAddress)
+        </p>
+        <p>
+            <label>@Html.DisplayNameFor(Model => Model.Password)</label>
+            @Html.PasswordFor(Model => Model.Password)
+        </p>
+        <p>
+            <label>@Html.DisplayNameFor(Model => Model.PasswordAgain)</label>
+            @Html.PasswordFor(Model => Model.PasswordAgain)
+        </p>
+
+        <input type="submit" name="RegisterButton" value="Register" />
+    }
+</div>
