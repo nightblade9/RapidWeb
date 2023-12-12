@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Stocks.DataAccess.Authentication;
 using StocksWeb.Authentication;
 
 namespace Stocks.Web.Pages.Authentication;
@@ -29,10 +30,12 @@ public class RegisterModel : PageModel
     public string PasswordAgain { get; set; }
     
     private readonly ILogger<IndexModel> _logger;
+    private readonly AuthenticationRepository _authRepo;
 
-    public RegisterModel(ILogger<IndexModel> logger)
+    public RegisterModel(ILogger<IndexModel> logger, AuthenticationRepository authRepo)
     {
         _logger = logger;
+        _authRepo = authRepo;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -60,11 +63,9 @@ public class RegisterModel : PageModel
             return Page();
         }
 
-        // Save to DB here
         var passwordHash = PasswordEncrypter.Hash(Password);
-        
-
-        // return RedirectToPage(...)
-        return Page();
+        await _authRepo.CreateUser(EmailAddress, passwordHash);
+        // TODO: put a viewbag message in
+        return RedirectToPage("/Index");
     }
 }

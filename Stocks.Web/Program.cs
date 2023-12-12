@@ -1,5 +1,6 @@
 using FluentMigrator.Runner;
 using Stocks.DataAccess;
+using Stocks.DataAccess.Authentication;
 using Stocks.DataAccess.Migration.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Routing
 {
     builder.Services.AddRazorPages(options => {
-        options.Conventions.AddPageRoute("/Index", "index");
         options.Conventions.AddPageRoute("/Authentication/Login", "login");
         options.Conventions.AddPageRoute("/Authentication/Register", "register");
     });
@@ -31,6 +31,7 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 
     builder.Services.AddTransient(x => new DatabaseConnection(connectionString));
     builder.Services.AddTransient(typeof(ConnectionChecker));
+    builder.Services.AddTransient(typeof(AuthenticationRepository));
 
     // Migrations runner config
     builder.Services.AddFluentMigratorCore().ConfigureRunner(r => r
