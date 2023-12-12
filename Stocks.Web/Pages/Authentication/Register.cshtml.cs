@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using StocksWeb.Authentication;
 
 namespace Stocks.Web.Pages.Authentication;
 
@@ -60,6 +61,9 @@ public class RegisterModel : PageModel
         }
 
         // Save to DB here
+        var passwordHash = PasswordEncrypter.Hash(Password);
+        
+
         // return RedirectToPage(...)
         return Page();
     }
