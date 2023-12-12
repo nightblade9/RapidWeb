@@ -16,9 +16,14 @@ public class DatabaseConnection
         _connection = new MySqlConnection(connectionString);
     }
 
-    public IEnumerable<T> Query<T>(string sql)
+    public async Task<T> QuerySingleAsync<T>(string sql, object? parameters = null)
     {
-        return _connection.Query<T>(sql);
+        return await _connection.QuerySingleAsync<T>(sql, parameters);
+    }
+
+    public async Task<T> QuerySingleOrDefaultAsync<T>(string sql, object? parameters = null)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<T>(sql, parameters);
     }
 
     public async Task ExecuteAsync(string sql, object? parameters = null)

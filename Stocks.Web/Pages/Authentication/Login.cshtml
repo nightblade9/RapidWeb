@@ -1,5 +1,25 @@
 @page
 @model LoginModel
-@{
-    ViewData["Title"] = "Login | Stocks Spectator";
-}
+
+<div class="text-center">
+    <h1 class="display-4">Login</h1>
+
+    @using (var form = Html.BeginForm(FormMethod.Post))
+    {
+        @Html.ValidationSummary(true) @* doesn't work *@
+        
+        <p>
+            <label>@Html.DisplayNameFor(model => model.EmailAddress)</label>
+            @Html.TextBoxFor(model => model.EmailAddress)
+            @Html.ValidationMessageFor(model => model.EmailAddress)
+        </p>
+        <p>
+            <label>@Html.DisplayNameFor(model => model.Password)</label>
+            @Html.PasswordFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+        </p>
+
+        <input type="submit" name="LoginButton" value="Login" />
+    }
+
+</div>

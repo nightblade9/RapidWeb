@@ -23,8 +23,8 @@ public class HealthCheckModel : PageModel
         ViewData["Title"] = "Health Check";
     }
 
-    public void OnGet()
+    public async Task OnGet()
     {
-       this.HealthCheckSuccessful["Database Connection"] = _connectionChecker.CanConnectToDatabase();
+       this.HealthCheckSuccessful["Database Connection"] = await _connectionChecker.CanConnectToDatabase();
     }
 }

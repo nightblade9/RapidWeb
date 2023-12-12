@@ -10,11 +10,11 @@ public class ConnectionChecker
 
     public ConnectionChecker(DatabaseConnection connection) => _connection = connection;
 
-    public bool CanConnectToDatabase()
+    public async Task<bool> CanConnectToDatabase()
     {
          try
          {
-            _connection.Query<int>("SELECT 1 + 2");
+            await _connection.QuerySingleAsync<int>("SELECT 1 + 2");
             return true;
         }
         catch (Exception e)

@@ -13,4 +13,12 @@ public class AuthenticationRepository
         await _connection.ExecuteAsync($"INSERT INTO {TableNames.UsersTableName} (EmailAddress, PasswordHash) VALUES (@email, @password)",
            new { email = emailAddress, password = ciphertext });
     }
+
+    public async Task<string> GetHashedPassword(string emailAddress)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<string>($"SELECT PasswordHash FROM {TableNames.UsersTableName} WHERE EmailAddress = @email",
+           new { email = emailAddress });
+
+        return result;
+    }
 }
