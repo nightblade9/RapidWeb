@@ -1,22 +1,20 @@
-using Dapper;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MySqlConnector;
+using StocksSpectator.DataAccess;
 
 namespace Stocks.Web.Pages;
 
 public class HealthCheckModel : PageModel
 {
     public Dictionary<string, bool> HealthCheckSuccessful = new();
+    
     private readonly ILogger<IndexModel> _logger;
-    private readonly MySqlConnection _connection;
+    private readonly ConnectionChecker _connectionChecker; 
 
-    public HealthCheckModel(
-        ILogger<IndexModel> logger,
-        MySqlConnection connection)
+    public HealthCheckModel(ILogger<IndexModel> logger, ConnectionChecker connectionChecker)
     {
         _logger = logger;
-        _connection = connection;
+        _connectionChecker = connectionChecker;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -27,14 +25,6 @@ public class HealthCheckModel : PageModel
 
     public void OnGet()
     {
-        try {
-            var result = _connection.Query<int>("SELECT 1 + 2");
-            HealthCheckSuccessful["Database Connection"] = true;
-        }
-        catch (Exception e)
-        {
-            //throw; // uncomment to debug the error
-            HealthCheckSuccessful["Database Connection"] = false;
-        }
+       this.HealthCheckSuccessful["Database Connection"] = _connectionChecker.CanConnectToDatabase();
     }
 }

@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using MySqlConnector;
+using StocksSpectator.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // DB config
 {
-    builder.Services.AddTransient(x =>
-        new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
+    builder.Services.AddTransient(x => new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
+    builder.Services.AddTransient(typeof(ConnectionChecker));
 }
 
 var app = builder.Build();
