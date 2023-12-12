@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.field-validation-error {
+  display: block;
+  color: red;
+}
