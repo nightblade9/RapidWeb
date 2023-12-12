@@ -15,19 +15,19 @@ public class RegisterModel : PageModel
     [Required]
     [EmailAddress]
     [Display(Name = "Email Address")]
-    public string EmailAddress { get; set; }
+    public string EmailAddress { get; set; } = default!;
     
     [BindProperty]
     [Required]
     [MinLength(12)]
-    public string Password { get; set; }
+    public string Password { get; set; } = default!;
 
     [BindProperty]
     [Display(Name = "Retype Password")]
     [Required]
     [MinLength(12)]
     [Compare(nameof(Password), ErrorMessage = "Passwords don't match.")] // doesn't work
-    public string PasswordAgain { get; set; }
+    public string PasswordAgain { get; set; } = default!;
     
     private readonly ILogger<IndexModel> _logger;
     private readonly AuthenticationRepository _authRepo;
@@ -46,7 +46,6 @@ public class RegisterModel : PageModel
 
     public void OnGet()
     {
-
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -56,13 +55,14 @@ public class RegisterModel : PageModel
             ModelState.AddModelError(nameof(Password), "Passwords don't match.");
         }
 
-        await Task.CompletedTask;
-
         if (!ModelState.IsValid)
         {
             return Page();
         }
 
+        // TODO: bail if the user is already registered
+
+        // Save to DB here
         var passwordHash = PasswordEncrypter.Hash(Password);
         await _authRepo.CreateUser(EmailAddress, passwordHash);
         // TODO: put a viewbag message in
