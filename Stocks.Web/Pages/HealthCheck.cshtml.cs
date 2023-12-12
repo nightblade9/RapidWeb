@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using StocksSpectator.DataAccess;
+using Stocks.DataAccess;
 
 namespace Stocks.Web.Pages;
 

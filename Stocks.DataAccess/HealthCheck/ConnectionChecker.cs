@@ -1,13 +1,14 @@
-namespace StocksSpectator.DataAccess;
+namespace Stocks.DataAccess;
+using Stocks.DataAccess;
 
 using Dapper;
 using MySqlConnector;
 
 public class ConnectionChecker
 {
-    private readonly MySqlConnection _connection;
+    private readonly DatabaseConnection _connection;
 
-    public ConnectionChecker(MySqlConnection connection) => _connection = connection;
+    public ConnectionChecker(DatabaseConnection connection) => _connection = connection;
 
     public bool CanConnectToDatabase()
     {
