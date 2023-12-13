@@ -31,3 +31,9 @@ Note that we're using SQLite for data:
 - The database isn't high-performance, but it works, even with migrations
 - The database exists as a file on disk (`prod.db` in the docker container under `./Stocks.Web`)
 - The DB file seems to persist even after building a new version of the same image
+
+To import the locally-built image into prod:
+
+- From `scripts` run `python export_docker_image.py`
+- On the prod machine, run `docker load -i latest_image.tar`
+- Run the image in a container with `docker run -p 80:8080 stocks-web-image`
