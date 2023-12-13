@@ -13,4 +13,4 @@ RUN dotnet publish Stocks.Web -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /Stocks.Web
 COPY --from=build-env /Stocks.Web/out .
-ENTRYPOINT ["dotnet", "Stocks.Web.dll"]
+#ENTRYPOINT ["dotnet", "Stocks.Web.dll"]

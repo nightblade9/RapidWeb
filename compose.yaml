@@ -3,22 +3,24 @@ services:
     image: stocks-web-image:latest
     command: sh -c "./Stocks.Web"
     ports:
-      - 127.0.0.1:3000:3000
-    working_dir: /Stocks.Web
-      - ./:/app
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_DB: stocks
+      - 127.0.0.1:8080:8080
+    # ports:
+    #   - 127.0.0.1:3000:3000
+    # working_dir: /Stocks.Web
+    #   - ./:/app
+#     environment:
+#       MYSQL_HOST: mysql
+#       MYSQL_USER: root
+#       MYSQL_PASSWORD: password
+#       MYSQL_DB: stocks
 
-  mysql:
-    image: mysql:8.0
-    volumes:
-      - web-mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: stocks
+#   mysql:
+#     image: mysql:8.0
+#     volumes:
+#       - web-mysql-data:/var/lib/mysql
+#     environment:
+#       MYSQL_ROOT_PASSWORD: password
+#       MYSQL_DATABASE: stocks
 
-volumes:
-  web-mysql-data:
+# volumes:
+#   web-mysql-data:
