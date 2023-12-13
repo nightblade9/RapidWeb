@@ -24,8 +24,8 @@ To run the application via Docker:
 
 - From a shell, `cd` into `scripts` and run `python .\build_docker_image.py`
 - When the process drops you in the docker container, type `exit`
-- Run `docker compose up` to start the app and map port 8080 from the container to the host
-- Open a new browser window and browse to `localhost:8080`
+- Run `docker compose up` to start the app and map port 8080 from the container to port 80 on the host (your PC)
+- Open a new browser window and browse to `localhost:80`
 
 Note that we're using SQLite for data:
 - The database isn't high-performance, but it works, even with migrations
