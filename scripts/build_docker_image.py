@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import os
 import subprocess
 
 DOCKER_IMAGE_NAME = "stocks-web-image"
