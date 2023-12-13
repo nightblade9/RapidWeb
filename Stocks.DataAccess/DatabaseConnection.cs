@@ -3,6 +3,7 @@ namespace Stocks.DataAccess;
 using Dapper;
 using System.Data.Common;
 using MySqlConnector;
+using Microsoft.Data.Sqlite;
 
 /// <summary>
 /// Abstraction so we can switch DB implementations in one place and it Just Works
@@ -13,7 +14,8 @@ public class DatabaseConnection
 
     public DatabaseConnection(string connectionString)
     {
-        _connection = new MySqlConnection(connectionString);
+        // _connection = new MySqlConnection(connectionString);
+        _connection = new SqliteConnection(connectionString);
     }
 
     public async Task<T> QuerySingleAsync<T>(string sql, object? parameters = null)

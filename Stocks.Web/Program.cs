@@ -35,7 +35,8 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 
     // Migrations runner config
     builder.Services.AddFluentMigratorCore().ConfigureRunner(r => r
-        .AddMySql5()
+        // .AddMySql5()
+        .AddSQLite()
         // Migrations connection string
         .WithGlobalConnectionString(connectionString)
         // Assembly we check for migrations 
