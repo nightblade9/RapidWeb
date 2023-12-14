@@ -36,4 +36,6 @@ To import the locally-built image into prod:
 
 - From `scripts` run `python export_docker_image.py`
 - On the prod machine, run `docker load -i latest_image.tar`
-- Run the image in a container with `docker run -p 80:8080 stocks-web-image`
+- Run the image in a container with `docker run -it --rm -p 8080:8080 `` -e DOTNET_URLS=http://+:8080 stocks-web-image`
+
+Open a browser and browse to `http://localhost:8080`. Tada!
