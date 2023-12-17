@@ -18,6 +18,10 @@ Open the source project and press F5 in VS Code; it should run and show the dash
 
 Browse to `/HealthCheck` and verify that the database connection check shows `Successful`.
 
+# Architecture
+
+History repeats, and so do web architectures. We're back to HTML pages with code-behind. For example, `Register.cshtml` contains the registration form, while `Register.cshtml.cs` contains the code-behind.
+
 # Running the App via Docker
 
 To run the application via Docker:
@@ -36,6 +40,9 @@ To import the locally-built image into prod:
 
 - From `scripts` run `python export_docker_image.py`
 - On the prod machine, run `docker load -i latest_image.tar`
-- Run the image in a container with: docker run -it --rm -p 8080:8080 ` -e DOTNET_URLS=http://+:8080 stocks-web-image
+- Run the image in a container with the script `deploy.py` from `scripts`
 
-Open a browser and browse to `http://localhost:8080`. Tada!
+Open a browser and browse to `http://localhost:80`. Tada!
+
+Note that we currently use SQLite, to simplify deployment. The DB file persists even when you update the image, as long as you run it in the same container.
+

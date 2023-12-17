@@ -53,6 +53,7 @@ public class RegisterModel : PageModel
         if (Password != PasswordAgain)
         {
             ModelState.AddModelError(nameof(Password), "Passwords don't match.");
+            return Page();
         }
 
         if (!ModelState.IsValid)
@@ -60,7 +61,15 @@ public class RegisterModel : PageModel
             return Page();
         }
 
-        // TODO: bail if the user is already registered
+        var isUserRegistered = await _authRepo.IsUserRegistered(EmailAddress);
+        if (isUserRegistered)
+        {
+            // Since we don't have forget-password functionality, this is an acceptable security trade-off;
+            // namely: attackers can tell who's registered by trying to re-register.
+            ModelState.AddModelError(nameof(EmailAddress), "Email address is already registered.");
+            return Page();
+        }
+
 
         // Save to DB here
         var passwordHash = PasswordEncrypter.Hash(Password);
