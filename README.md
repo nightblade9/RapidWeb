@@ -1,6 +1,10 @@
 # ASP.NET Core Template Project
 
-Tiny web application with registration and authentication. Security provided via BCrypt.
+Tiny web application with registration and authentication. 
+
+- Blazor and C# on the front-end
+- SQLite or MySQL on the back-end
+- Secure password hashing via BCrypt
 
 # Developer Environment Setup
 
