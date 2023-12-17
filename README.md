@@ -1,6 +1,6 @@
-# Stocks Spectator
+# ASP.NET Core Template Project
 
-Tiny web application that manages and tracks your stocks over time, across multiple accounts.
+Tiny web application with registration and authentication. Security provided via BCrypt.
 
 # Developer Environment Setup
 
@@ -17,6 +17,8 @@ Download the following:
 Open the source project and press F5 in VS Code; it should run and show the dashboard.
 
 Browse to `/HealthCheck` and verify that the database connection check shows `Successful`.
+
+Note that we're currently using SQLite to simplify deployment.
 
 # Architecture
 
