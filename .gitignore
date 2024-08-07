@@ -3,3 +3,8 @@
 
 *.db
 *.tar
+
+# SonarQube stuff
+sonarToken.txt
+.sonarqube
+coverage.xml
