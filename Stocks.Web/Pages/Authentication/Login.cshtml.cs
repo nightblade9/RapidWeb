@@ -50,7 +50,7 @@ public class LoginModel : PageModel
             return Page(); // User doesn't exist in DB
         }
 
-        var isAuthenticated = PasswordEncrypter.IsAMatch(EmailAddress, passwordHash);
+        var isAuthenticated = PasswordEncrypter.IsAMatch(Password, passwordHash);
 
         if (!isAuthenticated)
         {
