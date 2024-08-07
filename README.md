@@ -20,9 +20,15 @@ Download the following:
 
 Open the source project and press F5 in VS Code; it should run and show the dashboard.
 
-Browse to `/HealthCheck` and verify that the database connection check shows `Successful`.
+Browse to `/admin/HealthCheck` and verify that the database connection check shows `Successful`.
 
 Note that we're currently using SQLite to simplify deployment.
+
+
+# Functionality Included
+
+- Registration and login
+- Website health check
 
 # Architecture
 

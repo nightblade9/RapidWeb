@@ -1,8 +1,4 @@
 namespace Stocks.DataAccess;
-using Stocks.DataAccess;
-
-using Dapper;
-using MySqlConnector;
 
 public class ConnectionChecker
 {
@@ -17,9 +13,8 @@ public class ConnectionChecker
             await _connection.QuerySingleAsync<int>("SELECT 1 + 2");
             return true;
         }
-        catch (Exception e)
+        catch
         {
-            //throw; // uncomment to debug the error
             return false;
         }
     }
