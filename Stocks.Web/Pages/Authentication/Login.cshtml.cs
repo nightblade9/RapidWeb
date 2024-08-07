@@ -18,12 +18,12 @@ public class LoginModel : PageModel
     [Required]
     public string Password { get; set; } = default!;
 
-    private readonly ILogger<IndexModel> _logger;
+    private readonly ILogger<IndexModel> _securityLogger;
     private readonly AuthenticationRepository _authRepo;
 
-    public LoginModel(ILogger<IndexModel> logger, AuthenticationRepository authRepo)
+    public LoginModel(ILogger<IndexModel> securityLogger, AuthenticationRepository authRepo)
     {
-        _logger = logger;
+        _securityLogger = securityLogger;
         _authRepo = authRepo;
     }
 
@@ -54,9 +54,11 @@ public class LoginModel : PageModel
 
         if (!isAuthenticated)
         {
+            _securityLogger.LogInformation($"{EmailAddress} failed to authenticate at {DateTime.UtcNow}");
             return Page();
         }
 
+        _securityLogger.LogInformation($"{EmailAddress} logged in at {DateTime.UtcNow}");
         // TODO: put a viewbag message in
         return RedirectToPage("/Index");
     }
