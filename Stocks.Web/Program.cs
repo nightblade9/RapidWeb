@@ -72,4 +72,4 @@ using (var migratorScope = app.Services.CreateScope())
     migrationRunner.MigrateUp();
 }
 
-app.Run();
+await app.RunAsync();
