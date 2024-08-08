@@ -3,7 +3,7 @@
 Tiny web application with registration and authentication. 
 
 - Blazor and C# on the front-end
-- SQLite or MySQL on the back-end
+- SQLite on the back-end, with DB migrations
 - Secure password hashing via BCrypt
 
 # Developer Environment Setup

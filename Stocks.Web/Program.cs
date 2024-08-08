@@ -68,6 +68,12 @@ using (var migratorScope = app.Services.CreateScope())
 {
     var services = migratorScope.ServiceProvider;
     var migrationRunner = services.GetService<IMigrationRunner>();
+
+    if (migrationRunner == null)
+    {
+        return;
+    }
+
     migrationRunner.ValidateVersionOrder();
     migrationRunner.MigrateUp();
 }

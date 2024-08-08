@@ -23,7 +23,7 @@ public class DatabaseConnection
         return await _connection.QuerySingleAsync<T>(sql, parameters);
     }
 
-    public async Task<T> QuerySingleOrDefaultAsync<T>(string sql, object? parameters = null)
+    public async Task<T?> QuerySingleOrDefaultAsync<T>(string sql, object? parameters = null)
     {
         return await _connection.QuerySingleOrDefaultAsync<T>(sql, parameters);
     }

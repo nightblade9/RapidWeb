@@ -22,7 +22,7 @@ public class AuthenticationRepository
            new { email = emailAddress, password = ciphertext });
     }
 
-    public async Task<string> GetHashedPassword(string emailAddress)
+    public async Task<string?> GetHashedPassword(string emailAddress)
     {
         var result = await _connection.QuerySingleOrDefaultAsync<string>($"SELECT PasswordHash FROM {TableNames.UsersTableName} WHERE EmailAddress = @email",
            new { email = emailAddress });
