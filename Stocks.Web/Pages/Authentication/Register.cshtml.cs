@@ -29,11 +29,11 @@ public class RegisterModel : PageModel
     [Compare(nameof(Password), ErrorMessage = "Passwords don't match.")] // doesn't work
     public string PasswordAgain { get; set; } = default!;
     
-    private readonly ILogger<IndexModel> _logger;
+    private readonly ILogger<RegisterModel> _logger;
     private readonly IConfiguration _configuration;
     private readonly AuthenticationRepository _authRepo;
 
-    public RegisterModel(ILogger<IndexModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
+    public RegisterModel(ILogger<RegisterModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
     {
         _logger = logger;
         _configuration = configuration;
@@ -50,10 +50,10 @@ public class RegisterModel : PageModel
     {
         if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
         {
-            return RedirectToPage("/Index");
+            return NotFound();
         }
         
-        return NotFound();
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()

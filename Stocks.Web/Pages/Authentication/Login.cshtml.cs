@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -19,11 +18,11 @@ public class LoginModel : PageModel
     [Required]
     public string Password { get; set; } = default!;
 
-    private readonly ILogger<IndexModel> _logger; // security logger
+    private readonly ILogger<LoginModel> _logger; // security logger
     private readonly AuthenticationRepository _authRepo;
     private readonly IConfiguration _configuration;
 
-    public LoginModel(ILogger<IndexModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
+    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
     {
         _logger = logger;
         _authRepo = authRepo;
@@ -68,11 +67,11 @@ public class LoginModel : PageModel
 
         if (!isAuthenticated)
         {
-            _logger.LogInformation($"{EmailAddress} failed to authenticate at {DateTime.UtcNow}");
+            _logger.LogInformation("{EmailAddress} failed to authenticate at {UtcNow}", EmailAddress, DateTime.UtcNow);
             return Page();
         }
 
-        _logger.LogInformation($"{EmailAddress} logged in at {DateTime.UtcNow}");
+        _logger.LogInformation("{EmailAddress} logged in at {UtcNow}", EmailAddress, DateTime.UtcNow);
         
         // TODO: put a viewbag message in
         return RedirectToPage("/Index");
