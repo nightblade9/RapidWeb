@@ -53,14 +53,14 @@ public class RegisterModel : PageModel
             return RedirectToPage("/Index");
         }
         
-        return Page();
+        return NotFound();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
         if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
         {
-            return RedirectToPage("/Index");
+            return NotFound();
         }
 
         if (Password != PasswordAgain)

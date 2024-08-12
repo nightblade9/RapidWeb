@@ -40,7 +40,7 @@ public class LoginModel : PageModel
     {
         if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
         {
-            return RedirectToPage("/Index");
+            return NotFound();
         }
 
         return Page();
@@ -50,7 +50,7 @@ public class LoginModel : PageModel
     {
         if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
         {
-            return RedirectToPage("/Index");
+            return NotFound();
         }
 
         if (!ModelState.IsValid)
