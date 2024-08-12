@@ -12,7 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 [ExcludeFromCodeCoverage]
 public class DatabaseConnection
 {
-    private DbConnection _connection;
+    private readonly DbConnection _connection;
 
     public DatabaseConnection(string connectionString)
     {
