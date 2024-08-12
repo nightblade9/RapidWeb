@@ -5,9 +5,11 @@
     <h1 class="display-4">Health Checks</h1>
 </div>
 
+<p>As of <strong>@DateTime.UtcNow</strong>:</p>
+
 <ul>
-@foreach (var kvp in Model.HealthCheckSuccessful)
+@foreach (var kvp in Model.IsHealthCheckSuccessful)
 {
-    <li>@(kvp.Key) => @(kvp.Value == true ? "Successful" : "Failed")</li>
+    <li>@(kvp.Key) => @(kvp.Value ? "Successful" : "Failed")</li>
 }
 </ul>

@@ -87,6 +87,7 @@ public class RegisterModel : PageModel
         // Save to DB here
         var passwordHash = PasswordEncrypter.Hash(Password);
         await _authRepo.CreateUser(EmailAddress, passwordHash);
+        _logger.LogInformation("{EmailAddress} registered at {UtcNow}", EmailAddress, DateTime.UtcNow);
         // TODO: put a viewbag message in
         return RedirectToPage("/Index");
     }
