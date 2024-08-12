@@ -30,11 +30,13 @@ public class RegisterModel : PageModel
     public string PasswordAgain { get; set; } = default!;
     
     private readonly ILogger<IndexModel> _logger;
+    private readonly IConfiguration _configuration;
     private readonly AuthenticationRepository _authRepo;
 
-    public RegisterModel(ILogger<IndexModel> logger, AuthenticationRepository authRepo)
+    public RegisterModel(ILogger<IndexModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
     {
         _logger = logger;
+        _configuration = configuration;
         _authRepo = authRepo;
     }
 
@@ -44,12 +46,23 @@ public class RegisterModel : PageModel
         ViewData["Title"] = "Register";
     }
 
-    public void OnGet()
+    public IActionResult OnGet()
     {
+        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
+        {
+            return RedirectToPage("/Index");
+        }
+        
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
+        {
+            return RedirectToPage("/Index");
+        }
+
         if (Password != PasswordAgain)
         {
             ModelState.AddModelError(nameof(Password), "Passwords don't match.");

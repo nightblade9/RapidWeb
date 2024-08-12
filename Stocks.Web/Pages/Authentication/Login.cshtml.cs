@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,13 +19,15 @@ public class LoginModel : PageModel
     [Required]
     public string Password { get; set; } = default!;
 
-    private readonly ILogger<IndexModel> _securityLogger;
+    private readonly ILogger<IndexModel> _logger; // security logger
     private readonly AuthenticationRepository _authRepo;
+    private readonly IConfiguration _configuration;
 
-    public LoginModel(ILogger<IndexModel> securityLogger, AuthenticationRepository authRepo)
+    public LoginModel(ILogger<IndexModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
     {
-        _securityLogger = securityLogger;
+        _logger = logger;
         _authRepo = authRepo;
+        _configuration = configuration;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -33,12 +36,23 @@ public class LoginModel : PageModel
         ViewData["Title"] = "Login";
     }
 
-    public void OnGet()
+    public IActionResult OnGet()
     {
+        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
+        {
+            return RedirectToPage("/Index");
+        }
+
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
+        {
+            return RedirectToPage("/Index");
+        }
+
         if (!ModelState.IsValid)
         {
             return Page();
@@ -54,11 +68,12 @@ public class LoginModel : PageModel
 
         if (!isAuthenticated)
         {
-            _securityLogger.LogInformation($"{EmailAddress} failed to authenticate at {DateTime.UtcNow}");
+            _logger.LogInformation($"{EmailAddress} failed to authenticate at {DateTime.UtcNow}");
             return Page();
         }
 
-        _securityLogger.LogInformation($"{EmailAddress} logged in at {DateTime.UtcNow}");
+        _logger.LogInformation($"{EmailAddress} logged in at {DateTime.UtcNow}");
+        
         // TODO: put a viewbag message in
         return RedirectToPage("/Index");
     }

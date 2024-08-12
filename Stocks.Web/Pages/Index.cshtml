@@ -4,5 +4,11 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <div class="alert-info" style="display: @(ViewBag.Message != null ? "block" : "none");">@ViewBag.Message</div>
-    <p>Click <a href="~/login">here</a> to log in. Click <a href="~/register">here</a> to register.</p>
+
+    <p>Your marketing value-proposal goes here.</p>
+    
+    @if (Model.Configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
+    {
+        <p>Click <a href="~/login">here</a> to log in. Click <a href="~/register">here</a> to register.</p>
+    }
 </div>

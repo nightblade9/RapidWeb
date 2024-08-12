@@ -5,11 +5,13 @@ namespace Stocks.Web.Pages;
 
 public class IndexModel : PageModel
 {
+    internal readonly IConfiguration Configuration;
     private readonly ILogger<IndexModel> _logger;
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
     {
         _logger = logger;
+        Configuration = configuration;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
