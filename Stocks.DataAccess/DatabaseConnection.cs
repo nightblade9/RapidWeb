@@ -2,19 +2,21 @@ namespace Stocks.DataAccess;
 
 using Dapper;
 using System.Data.Common;
-using MySqlConnector;
 using Microsoft.Data.Sqlite;
+using System.Diagnostics.CodeAnalysis;
+
 
 /// <summary>
 /// Abstraction so we can switch DB implementations in one place and it Just Works
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class DatabaseConnection
 {
     private DbConnection _connection;
 
     public DatabaseConnection(string connectionString)
     {
-        // _connection = new MySqlConnection(connectionString);
+        // To use MySQL, substitute with an instance of MySqlConnection
         _connection = new SqliteConnection(connectionString);
     }
 

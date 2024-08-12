@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Stocks.DataAccess.Migration;
 
 namespace Stocks.DataAccess.Authentication;
 
+[ExcludeFromCodeCoverage]
 public class AuthenticationRepository
 {
     private readonly DatabaseConnection _connection;

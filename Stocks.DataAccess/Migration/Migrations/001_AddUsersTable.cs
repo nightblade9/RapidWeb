@@ -1,7 +1,9 @@
 namespace Stocks.DataAccess.Migration.Migrations;
 
+using System.Diagnostics.CodeAnalysis;
 using FluentMigrator;
 
+[ExcludeFromCodeCoverage]
 [Migration(001)]
 public class AddUsersTable_001 : Migration
 {

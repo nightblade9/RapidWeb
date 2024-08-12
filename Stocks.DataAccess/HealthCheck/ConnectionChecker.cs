@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Stocks.DataAccess;
 
+[ExcludeFromCodeCoverage]
 public class ConnectionChecker
 {
     private readonly DatabaseConnection _connection;
