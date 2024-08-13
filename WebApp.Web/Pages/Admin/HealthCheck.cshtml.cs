@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Stocks.DataAccess;
+using WebApp.DataAccess;
 
-namespace Stocks.Web.Pages;
+namespace WebApp.Web.Pages;
 
 public class HealthCheckModel : PageModel
 {

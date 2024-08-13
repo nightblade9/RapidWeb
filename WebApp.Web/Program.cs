@@ -1,7 +1,7 @@
 using FluentMigrator.Runner;
-using Stocks.DataAccess;
-using Stocks.DataAccess.Authentication;
-using Stocks.DataAccess.Migration.Migrations;
+using WebApp.DataAccess;
+using WebApp.DataAccess.Authentication;
+using WebApp.DataAccess.Migration.Migrations;
 
 /// Uses an implicit partial class. Manually exclude from code coverage on the tool side.
 /// In SonarQube, add it to general file exclusions (**/Program.cs)

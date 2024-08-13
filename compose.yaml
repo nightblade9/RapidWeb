@@ -1,18 +1,18 @@
 services:
   app:
-    image: stocks-web-image:latest
-    command: sh -c "./Stocks.Web"
+    image: webapp-web-image:latest
+    command: sh -c "./WebApp.Web"
     ports:
       - 127.0.0.1:80:8080
     # ports:
     #   - 127.0.0.1:3000:3000
-    # working_dir: /Stocks.Web
+    # working_dir: /WebApp.Web
     #   - ./:/app
 #     environment:
 #       MYSQL_HOST: mysql
 #       MYSQL_USER: root
 #       MYSQL_PASSWORD: password
-#       MYSQL_DB: stocks
+#       MYSQL_DB: webapp
 
 #   mysql:
 #     image: mysql:8.0
@@ -20,7 +20,7 @@ services:
 #       - web-mysql-data:/var/lib/mysql
 #     environment:
 #       MYSQL_ROOT_PASSWORD: password
-#       MYSQL_DATABASE: stocks
+#       MYSQL_DATABASE: webapp
 
 # volumes:
 #   web-mysql-data:

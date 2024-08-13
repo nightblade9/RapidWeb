@@ -1,4 +1,4 @@
-namespace Stocks.DataAccess;
+namespace WebApp.DataAccess;
 
 using Dapper;
 using System.Data.Common;

@@ -1,4 +1,4 @@
-namespace Stocks.DataAccess.Migration.Migrations;
+namespace WebApp.DataAccess.Migration.Migrations;
 
 using System.Diagnostics.CodeAnalysis;
 using FluentMigrator;

@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using Stocks.DataAccess.Migration;
+using WebApp.DataAccess.Migration;
 
-namespace Stocks.DataAccess.Authentication;
+namespace WebApp.DataAccess.Authentication;
 
 [ExcludeFromCodeCoverage]
 public class AuthenticationRepository

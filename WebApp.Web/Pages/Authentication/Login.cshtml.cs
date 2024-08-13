@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Stocks.DataAccess.Authentication;
-using StocksWeb.Authentication;
+using WebApp.DataAccess.Authentication;
+using WebAppWeb.Authentication;
 
-namespace Stocks.Web.Pages.Authentication;
+namespace WebApp.Web.Pages.Authentication;
 
 public class LoginModel : PageModel
 {

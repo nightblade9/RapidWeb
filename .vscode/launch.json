@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Stocks.Web/bin/Debug/net8.0/Stocks.Web.dll",
+            "program": "${workspaceFolder}/WebApp.Web/bin/Debug/net8.0/WebApp.Web.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Stocks.Web",
+            "cwd": "${workspaceFolder}/WebApp.Web",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

@@ -16,7 +16,7 @@ Download the following:
     - MySQL Server 8.0.35 (set up the root password to be "password")
     - MySQL Workbench 8.0.34
     - Connector/NET 8.0.33.1
-    - Launch the workbench, connect, and create a new schema called `Stocks`
+    - Launch the workbench, connect, and create a new schema called `WebApp`
 
 Open the source project and press F5 in VS Code; it should run and show the dashboard.
 
@@ -45,7 +45,7 @@ To run the application via Docker:
 
 Note that we're using SQLite for data:
 - The database isn't high-performance, but it works, even with migrations
-- The database exists as a file on disk (`prod.db` in the docker container under `./Stocks.Web`)
+- The database exists as a file on disk (`prod.db` in the docker container under `./WebApp.Web`)
 - The DB file seems to persist even after building a new version of the same image
 
 To import the locally-built image into prod:

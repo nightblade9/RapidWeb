@@ -1,4 +1,4 @@
-namespace StocksWeb.Authentication;
+namespace WebAppWeb.Authentication;
 
 using BCrypt.Net;
 

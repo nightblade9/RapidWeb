@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Stocks.DataAccess;
+namespace WebApp.DataAccess;
 
 [ExcludeFromCodeCoverage]
 public class ConnectionChecker

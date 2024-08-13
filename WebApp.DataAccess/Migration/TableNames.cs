@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Stocks.DataAccess.Migration;
+namespace WebApp.DataAccess.Migration;
 
 [ExcludeFromCodeCoverage]
 public static class TableNames
