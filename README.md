@@ -5,6 +5,9 @@ RapidWeb is a quick-start web application, intended as a base template website (
 Features:
 - Registration 
 - Authentication 
+- Deploys to a Docker container
+
+Note that it is NOT production ready; at a minimum, you need to connect to a production-grade database (not a SQLite one).
 
 The tech stack:
 
