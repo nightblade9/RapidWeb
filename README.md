@@ -1,6 +1,12 @@
-# ASP.NET Core Template Project
+# RapidWeb
 
-Tiny web application with registration and authentication. 
+RapidWeb is a quick-start web application, intended as a base template website (just add business logic)!
+
+Features:
+- Registration 
+- Authentication 
+
+The tech stack:
 
 - Blazor and C# on the front-end
 - SQLite on the back-end, with DB migrations
