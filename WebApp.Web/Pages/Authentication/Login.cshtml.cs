@@ -54,12 +54,15 @@ public class LoginModel : PageModel
 
         if (!ModelState.IsValid)
         {
+            ViewData["Message"] = "Please fill out all fields.";
             return Page();
         }
 
         var passwordHash = await _authRepo.GetHashedPassword(EmailAddress);
         if (string.IsNullOrWhiteSpace(passwordHash))
         {
+            _logger.LogInformation("Login attempt for non-existing user {EmailAddress} at {UtcNow}", EmailAddress, DateTime.UtcNow);
+            ViewData["Message"] = "Authentication failed.";
             return Page(); // User doesn't exist in DB
         }
 
@@ -68,12 +71,14 @@ public class LoginModel : PageModel
         if (!isAuthenticated)
         {
             _logger.LogInformation("{EmailAddress} failed to authenticate at {UtcNow}", EmailAddress, DateTime.UtcNow);
+            ViewData["Message"] = "Authentication failed.";
             return Page();
         }
 
         _logger.LogInformation("{EmailAddress} logged in at {UtcNow}", EmailAddress, DateTime.UtcNow);
         
         // TODO: put a viewbag message in
+        ViewData["Message"] = "Logged in.";
         return RedirectToPage("/Index");
     }
 }
