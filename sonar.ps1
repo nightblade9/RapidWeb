@@ -22,7 +22,7 @@
 
 ####################
 
-$ProjectName = "WebTemplate"
+$ProjectName = "RapidWeb"
 
 $ErrorActionPreference = "Stop"
 $sonarToken = [System.IO.File]::ReadAllText("sonarToken.txt")
