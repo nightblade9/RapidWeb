@@ -31,9 +31,25 @@ $stopWatch.Start()
 
 dotnet sonarscanner begin /k:"$ProjectName" /d:sonar.host.url="http://localhost:9000" /d:sonar.login=$sonarToken /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.test.exclusions=**/*Test*.cs 
 
+if ($LastExitCode -ne 0)
+{
+    Write-Error "Failed to run dotnet sonarscanner begin; error code is $LastExitCode"
+}
+
 dotnet build --no-incremental
+
+if ($LastExitCode -ne 0)
+{
+    Write-Error "Build failed; exit code is $LastExitCode"
+}
+
 # Assumes no end-to-end tests. If they exist, add to the dotnet test command: --filter FullyQualifiedName!~EndToEnd
 dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+
+if ($LastExitCode -ne 0)
+{
+    Write-Error "Automated tests failed; error code is $LastExitCode"
+}
 
 dotnet sonarscanner end /d:sonar.login=$sonarToken
 
