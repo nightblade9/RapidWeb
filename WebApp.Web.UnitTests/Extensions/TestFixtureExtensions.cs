@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApp.Web.UnitTests.Extensions;
 
@@ -25,5 +26,19 @@ public static class TestFixtureExtensions
         );
 
         return toReturn;
+    }
+
+    public static IConfiguration CreateConfiguration(this object o, bool isRegistrationFeatureToggleEnabled = true)
+    {
+        var configValues = new Dictionary<string, string>
+        {
+            {"FeatureToggles:AllowUserRegistration", isRegistrationFeatureToggleEnabled.ToString() }
+        };
+
+        var configuration = new ConfigurationBuilder()
+        .AddInMemoryCollection(configValues)
+        .Build();
+
+        return configuration;
     }
 }

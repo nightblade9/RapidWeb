@@ -24,20 +24,6 @@ public class RegisterModelTests
             viewData);
     }
 
-    private static IConfiguration CreateConfiguration(bool isFeatureToggleEnabled = true)
-    {
-        var configValues = new Dictionary<string, string>
-        {
-            {"FeatureToggles:AllowUserRegistration", isFeatureToggleEnabled.ToString() }
-        };
-
-        var configuration = new ConfigurationBuilder()
-        .AddInMemoryCollection(configValues)
-        .Build();
-
-        return configuration;
-    }
-
     [Test]
     public void OnPageHandlerExecuted_SetsTitleInViewData()
     {
@@ -56,7 +42,7 @@ public class RegisterModelTests
     public void OnGet_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
     {
         // Arrange
-        var page = CreateRegisterModel(CreateConfiguration(false));
+        var page = CreateRegisterModel(this.CreateConfiguration(false));
 
         // Act
         var actual = page.OnGet();
@@ -69,7 +55,7 @@ public class RegisterModelTests
     public void OnGet_ReturnsPageResult_IfFeatureToggleIsEnabled()
     {
         // Arrange
-        var page = CreateRegisterModel(CreateConfiguration());
+        var page = CreateRegisterModel(this.CreateConfiguration());
 
         // Act
         var actual = page.OnGet();
@@ -82,7 +68,7 @@ public class RegisterModelTests
     public async Task OnPostAsync_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
     {
         // Arrange
-        var page = CreateRegisterModel(CreateConfiguration(false));
+        var page = CreateRegisterModel(this.CreateConfiguration(false));
 
         // Act
         var actual = await page.OnPostAsync();
@@ -95,7 +81,7 @@ public class RegisterModelTests
     public async Task OnPostAsync_ReturnsPageWithModelError_IfPasswordsDontMatch()
     {
         // Arrange
-        var page = CreateRegisterModel(CreateConfiguration(true));
+        var page = CreateRegisterModel(this.CreateConfiguration(true));
         page.Password = "right";
         page.PasswordAgain = "r1gh7";
 
@@ -115,7 +101,7 @@ public class RegisterModelTests
         // Arrange
         var authRepo = Substitute.For<IAuthenticationRepository>();
         authRepo.IsUserRegistered(Arg.Any<string>()).Returns(true);
-        var page = CreateRegisterModel(CreateConfiguration(true), authRepo: authRepo);
+        var page = CreateRegisterModel(this.CreateConfiguration(true), authRepo: authRepo);
 
         // Act
         var actual = await page.OnPostAsync();
@@ -134,7 +120,7 @@ public class RegisterModelTests
         var authRepo = Substitute.For<IAuthenticationRepository>();
         authRepo.IsUserRegistered(Arg.Any<string>()).Returns(false);
         
-        var page = CreateRegisterModel(CreateConfiguration(true), authRepo: authRepo);
+        var page = CreateRegisterModel(this.CreateConfiguration(true), authRepo: authRepo);
         page.EmailAddress = "test@test.com";
         // Password is too short, but enforcement is configured via attributes, so we can't test/enforce it.
         page.Password = "password";
