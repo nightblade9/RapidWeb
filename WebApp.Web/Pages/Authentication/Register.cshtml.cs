@@ -31,19 +31,23 @@ public class RegisterModel : PageModel
     
     private readonly ILogger<RegisterModel> _logger;
     private readonly IConfiguration _configuration;
-    private readonly AuthenticationRepository _authRepo;
+    private readonly IAuthenticationRepository _authRepo;
 
-    public RegisterModel(ILogger<RegisterModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
+    // The page's ViewData. Injectable for unit testing, of course.
+    private IDictionary<string, object?> _viewData; 
+
+    public RegisterModel(ILogger<RegisterModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo, IDictionary<string, object?>? viewDataDictionary = null)
     {
         _logger = logger;
         _configuration = configuration;
         _authRepo = authRepo;
+        _viewData = viewDataDictionary ?? ViewData;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
     {
         base.OnPageHandlerExecuted(context);
-        ViewData["Title"] = "Register";
+        _viewData["Title"] = "Register";
     }
 
     public IActionResult OnGet()

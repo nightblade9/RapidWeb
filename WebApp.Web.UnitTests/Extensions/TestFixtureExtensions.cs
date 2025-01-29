@@ -2,12 +2,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebApp.Web.UnitTests.PageExtensions;
+namespace WebApp.Web.UnitTests.Extensions;
 
-public static class PageModelExtensions
+public static class TestFixtureExtensions
 {
-    
-    public static PageHandlerExecutedContext CreateContext(this PageModel p)
+    public static PageHandlerExecutedContext CreateContext(this object o)
     {
         var httpContext = new DefaultHttpContext() { TraceIdentifier = Guid.NewGuid().ToString() };
 

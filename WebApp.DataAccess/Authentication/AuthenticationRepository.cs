@@ -4,7 +4,7 @@ using WebApp.DataAccess.Migration;
 namespace WebApp.DataAccess.Authentication;
 
 [ExcludeFromCodeCoverage]
-public class AuthenticationRepository
+public class AuthenticationRepository : IAuthenticationRepository
 {
     private readonly DatabaseConnection _connection;
 

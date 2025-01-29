@@ -1,8 +1,9 @@
 namespace WebApp.Web.UnitTests;
 
+using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using WebApp.Web.Pages;
-using WebApp.Web.UnitTests.PageExtensions;
+using WebApp.Web.UnitTests.Extensions;
 
 [TestFixture]
 public class ErrorModelTests
@@ -31,7 +32,7 @@ public class ErrorModelTests
         var page = new ErrorModel(viewData);
         
         // Act
-        page.OnPageHandlerExecuted(page.CreateContext());
+        page.OnPageHandlerExecuted(this.CreateContext());
         
         // Assert
         Assert.That(viewData["Title"], Is.EqualTo(expectedTitle));
