@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.DataAccess.Authentication;
+using WebApp.Web.Pages.Shared;
 using WebAppWeb.Authentication;
 
 namespace WebApp.Web.Pages.Authentication;
 
-public class LoginModel : PageModel
+public class LoginModel : BasePageModel
 {
     [BindProperty]
     [Required]
@@ -22,7 +22,8 @@ public class LoginModel : PageModel
     private readonly IAuthenticationRepository _authRepo;
     private readonly IConfiguration _configuration;
 
-    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo)
+    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo, Dictionary<string, object?>? viewData)
+    : base(viewData)
     {
         _logger = logger;
         _authRepo = authRepo;
