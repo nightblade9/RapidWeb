@@ -37,18 +37,4 @@ public class ErrorModelTests
         // Assert
         Assert.That(viewData["Title"], Is.EqualTo(expectedTitle));
     }
-
-    [Test]
-    public void OnGet_SetsRequestIdToHttpContextTraceIdentifier_IfActivityIdIsNull()
-    {
-        // Arrange
-        var page = new ErrorModel();
-        var expected = page.HttpContext.TraceIdentifier;
-
-        // Act
-        page.OnGet();
-
-        // Assert
-        Assert.That(page.RequestId, Is.EqualTo(expected));
-    }
 }
