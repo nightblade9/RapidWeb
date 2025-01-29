@@ -7,7 +7,7 @@ public abstract class BasePageModel : PageModel
     // The page's ViewData. Injectable for unit testing, of course.
     private IDictionary<string, object?>? _viewData;
 
-    public BasePageModel(IDictionary<string, object?>? viewDataDictionary = null)
+    protected BasePageModel(IDictionary<string, object?>? viewDataDictionary = null)
     {
         _viewData = viewDataDictionary;
     }
