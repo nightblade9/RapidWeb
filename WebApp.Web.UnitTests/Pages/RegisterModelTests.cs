@@ -1,10 +1,13 @@
 namespace WebApp.Web.UnitTests;
 
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
+using WebApp.DataAccess.Authentication;
 using WebApp.Web.Pages.Authentication;
 using WebApp.Web.UnitTests.Extensions;
 using WebApp.Web.UnitTests.Stubs;
@@ -12,6 +15,29 @@ using WebApp.Web.UnitTests.Stubs;
 [TestFixture]
 public class RegisterModelTests
 {
+    private static RegisterModel CreateRegisterModel(IConfiguration? configuration = null, Dictionary<string, object?>? viewData = null, IAuthenticationRepository authRepo = null)
+    {
+        return new RegisterModel(
+            Substitute.For<ILogger<RegisterModel>>(),
+            configuration ?? Substitute.For<IConfiguration>(),
+            authRepo ?? new AuthenticationRepositoryStub(),
+            viewData);
+    }
+
+    private static IConfiguration CreateConfiguration(bool isFeatureToggleEnabled = true)
+    {
+        var configValues = new Dictionary<string, string>
+        {
+            {"FeatureToggles:AllowUserRegistration", isFeatureToggleEnabled.ToString() }
+        };
+
+        var configuration = new ConfigurationBuilder()
+        .AddInMemoryCollection(configValues)
+        .Build();
+
+        return configuration;
+    }
+
     [Test]
     public void OnPageHandlerExecuted_SetsTitleInViewData()
     {
@@ -30,12 +56,7 @@ public class RegisterModelTests
     public void OnGet_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
     {
         // Arrange
-        var config = CreateConfiguration(new()
-        {
-            {"FeatureToggles:AllowUserRegistration", "false" }
-        });
-
-        var page = CreateRegisterModel(config);
+        var page = CreateRegisterModel(CreateConfiguration(false));
 
         // Act
         var actual = page.OnGet();
@@ -43,18 +64,89 @@ public class RegisterModelTests
         // Assert
         Assert.That(actual, Is.InstanceOf<NotFoundResult>());
     }
-
-    public RegisterModel CreateRegisterModel(IConfiguration configuration = null, Dictionary<string, object?>? viewData = null)
+    
+    [Test]
+    public void OnGet_ReturnsPageResult_IfFeatureToggleIsEnabled()
     {
-        return new RegisterModel(Substitute.For<ILogger<RegisterModel>>(), configuration ?? Substitute.For<IConfiguration>(), new AuthenticationRepositoryStub(), viewData);
+        // Arrange
+        var page = CreateRegisterModel(CreateConfiguration());
+
+        // Act
+        var actual = page.OnGet();
+
+        // Assert
+        Assert.That(actual, Is.InstanceOf<PageResult>());
     }
 
-    public IConfiguration CreateConfiguration(Dictionary<string, string> configValues = null)
+    [Test]
+    public async Task OnPostAsync_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
     {
-        var configuration = new ConfigurationBuilder()
-        .AddInMemoryCollection(configValues ?? new())
-        .Build();
+        // Arrange
+        var page = CreateRegisterModel(CreateConfiguration(false));
 
-        return configuration;
+        // Act
+        var actual = await page.OnPostAsync();
+
+        // Assert
+        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
+    }
+
+    [Test]
+    public async Task OnPostAsync_ReturnsPageWithModelError_IfPasswordsDontMatch()
+    {
+        // Arrange
+        var page = CreateRegisterModel(CreateConfiguration(true));
+        page.Password = "right";
+        page.PasswordAgain = "r1gh7";
+
+        // Act
+        var actual = await page.OnPostAsync();
+
+        // Assert
+        Assert.That(actual, Is.InstanceOf<PageResult>());
+        var modelState = page.ModelState;
+        Assert.That(modelState.ErrorCount, Is.EqualTo(1));
+        Assert.That(modelState.Any(a => a.Key == nameof(page.Password)));
+    }
+
+    [Test]
+    public async Task OnPostAsync_ReturnsPageWithModelError_IfUserIsAlreadyRegistered()
+    {
+        // Arrange
+        var authRepo = Substitute.For<IAuthenticationRepository>();
+        authRepo.IsUserRegistered(Arg.Any<string>()).Returns(true);
+        var page = CreateRegisterModel(CreateConfiguration(true), authRepo: authRepo);
+
+        // Act
+        var actual = await page.OnPostAsync();
+
+        // Assert
+        Assert.That(actual, Is.InstanceOf<PageResult>());
+        var modelState = page.ModelState;
+        Assert.That(modelState.ErrorCount, Is.EqualTo(1));
+        Assert.That(modelState.Any(a => a.Key == nameof(page.EmailAddress)));
+    }
+
+    [Test]
+    public async Task OnPostAsync_CreatesUserAndRedirectsToHomePage_IfUserRegistersSuccessfully()
+    {
+        // Arrange
+        var authRepo = Substitute.For<IAuthenticationRepository>();
+        authRepo.IsUserRegistered(Arg.Any<string>()).Returns(false);
+        
+        var page = CreateRegisterModel(CreateConfiguration(true), authRepo: authRepo);
+        page.EmailAddress = "test@test.com";
+        // Password is too short, but enforcement is configured via attributes, so we can't test/enforce it.
+        page.Password = "password";
+        page.PasswordAgain = "password";
+
+        // Act
+        var actual = await page.OnPostAsync();
+
+        // Assert
+        Assert.That(actual, Is.InstanceOf<RedirectToPageResult>());
+        var modelState = page.ModelState;
+        Assert.That(modelState.ErrorCount, Is.EqualTo(0));
+        await authRepo.Received(1).CreateUser(Arg.Any<string>(), Arg.Any<string>());
     }
 }

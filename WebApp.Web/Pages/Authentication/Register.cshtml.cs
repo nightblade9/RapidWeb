@@ -33,7 +33,6 @@ public class RegisterModel : BasePageModel
     private readonly IConfiguration _configuration;
     private readonly IAuthenticationRepository _authRepo;
 
-
     public RegisterModel(
         ILogger<RegisterModel> logger,
         IConfiguration configuration,
@@ -88,7 +87,6 @@ public class RegisterModel : BasePageModel
             ModelState.AddModelError(nameof(EmailAddress), "Email address is already registered.");
             return Page();
         }
-
 
         // Save to DB here
         var passwordHash = PasswordEncrypter.Hash(Password);
