@@ -1,6 +1,7 @@
 using FluentMigrator.Runner;
 using WebApp.DataAccess;
 using WebApp.DataAccess.Authentication;
+using WebApp.DataAccess.HealthCheck;
 using WebApp.DataAccess.Migration.Migrations;
 
 /// Uses an implicit partial class. Manually exclude from code coverage on the tool side.
@@ -34,7 +35,7 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 
     // Dependency injection for our app
     builder.Services.AddTransient(x => new DatabaseConnection(connectionString));
-    builder.Services.AddTransient<ConnectionChecker>();
+    builder.Services.AddTransient<IConnectionChecker, ConnectionChecker>();
     builder.Services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
 
     // DB Migrations runner config

@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace WebApp.DataAccess;
+namespace WebApp.DataAccess.HealthCheck;
 
 [ExcludeFromCodeCoverage]
-public class ConnectionChecker
+public class ConnectionChecker : IConnectionChecker
 {
     private readonly DatabaseConnection _connection;
 

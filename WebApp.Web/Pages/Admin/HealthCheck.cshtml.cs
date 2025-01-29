@@ -1,18 +1,18 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using WebApp.DataAccess;
+using WebApp.DataAccess.HealthCheck;
+using WebApp.Web.Pages.Shared;
 
 namespace WebApp.Web.Pages;
 
-public class HealthCheckModel : PageModel
+public class HealthCheckModel : BasePageModel
 {
-    internal Dictionary<string, bool> IsHealthCheckSuccessful = new();
+    public Dictionary<string, bool> IsHealthCheckSuccessful { get; private set; } = new();
     
-    private readonly ILogger<IndexModel> _logger;
-    private readonly ConnectionChecker _connectionChecker;
+    private readonly ILogger<HealthCheckModel> _logger;
+    private readonly IConnectionChecker _connectionChecker;
 
-    public HealthCheckModel(ILogger<IndexModel> logger, ConnectionChecker connectionChecker)
+    public HealthCheckModel(ILogger<HealthCheckModel> logger, IConnectionChecker connectionChecker, Dictionary<string, object?> viewData = null)
+    : base(viewData)
     {
         _logger = logger;
         _connectionChecker = connectionChecker;
