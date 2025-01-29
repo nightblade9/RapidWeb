@@ -1,11 +1,8 @@
 namespace WebApp.Web.UnitTests;
 
-using System.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using NUnit.Framework;
 using WebApp.Web.Pages;
+using WebApp.Web.UnitTests.PageExtensions;
 
 [TestFixture]
 public class ErrorModelTests
@@ -34,7 +31,7 @@ public class ErrorModelTests
         var page = new ErrorModel(viewData);
         
         // Act
-        page.OnPageHandlerExecuted(CreateContext());
+        page.OnPageHandlerExecuted(page.CreateContext());
         
         // Assert
         Assert.That(viewData["Title"], Is.EqualTo(expectedTitle));
@@ -52,26 +49,5 @@ public class ErrorModelTests
 
         // Assert
         Assert.That(page.RequestId, Is.EqualTo(expected));
-    }
-
-    private PageHandlerExecutedContext CreateContext()
-    {
-        var httpContext = new DefaultHttpContext() { TraceIdentifier = Guid.NewGuid().ToString() };
-
-        var actionContext = new Microsoft.AspNetCore.Mvc.ActionContext(
-            httpContext,
-            new Microsoft.AspNetCore.Routing.RouteData(),
-            new Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor()); 
-
-        var pageContext = new PageContext(actionContext);
-
-        var toReturn = new PageHandlerExecutedContext(
-            pageContext,
-            new List<IFilterMetadata>(),
-            new Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.HandlerMethodDescriptor(),
-            new object()
-        );
-
-        return toReturn;
     }
 }
