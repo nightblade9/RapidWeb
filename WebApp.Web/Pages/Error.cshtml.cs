@@ -9,18 +9,22 @@ namespace WebApp.Web.Pages;
 public class ErrorModel : PageModel
 {
     public string? RequestId { get; set; }
+    
+    // The page's ViewData. Injectable for unit testing, of course.
+    private IDictionary<string, object?> _viewData; 
 
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-    public ErrorModel()
+    public ErrorModel(IDictionary<string, object?>? viewDataDictionary = null)
     {
+        _viewData = viewDataDictionary ?? ViewData;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
     {
         base.OnPageHandlerExecuted(context);
 
-        ViewData["Title"] = "Error";
+        _viewData["Title"] = "Error";
     }
 
     public void OnGet()
