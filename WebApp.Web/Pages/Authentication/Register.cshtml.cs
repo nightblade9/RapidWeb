@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.DataAccess.Authentication;
+using WebApp.Web.Pages.Shared;
 using WebAppWeb.Authentication;
 
 namespace WebApp.Web.Pages.Authentication;
 
-public class RegisterModel : PageModel
+public class RegisterModel : BasePageModel
 {
     private const int MinimumPasswordLength = 12;
 
@@ -33,21 +33,23 @@ public class RegisterModel : PageModel
     private readonly IConfiguration _configuration;
     private readonly IAuthenticationRepository _authRepo;
 
-    // The page's ViewData. Injectable for unit testing, of course.
-    private IDictionary<string, object?> _viewData; 
 
-    public RegisterModel(ILogger<RegisterModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo, IDictionary<string, object?>? viewDataDictionary = null)
+    public RegisterModel(
+        ILogger<RegisterModel> logger,
+        IConfiguration configuration,
+        IAuthenticationRepository authRepo,
+        IDictionary<string, object?>? viewDataDictionary = null)
+        : base(viewDataDictionary)
     {
         _logger = logger;
         _configuration = configuration;
         _authRepo = authRepo;
-        _viewData = viewDataDictionary ?? ViewData;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
     {
         base.OnPageHandlerExecuted(context);
-        _viewData["Title"] = "Register";
+        ViewData["Title"] = "Register";
     }
 
     public IActionResult OnGet()

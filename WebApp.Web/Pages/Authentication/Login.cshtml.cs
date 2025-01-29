@@ -19,10 +19,10 @@ public class LoginModel : PageModel
     public string Password { get; set; } = default!;
 
     private readonly ILogger<LoginModel> _logger; // security logger
-    private readonly AuthenticationRepository _authRepo;
+    private readonly IAuthenticationRepository _authRepo;
     private readonly IConfiguration _configuration;
 
-    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, AuthenticationRepository authRepo)
+    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo)
     {
         _logger = logger;
         _authRepo = authRepo;

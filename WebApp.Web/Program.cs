@@ -32,11 +32,12 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
         throw new InvalidOperationException("Please define a connection string in your config.");
     }
 
+    // Dependency injection for our app
     builder.Services.AddTransient(x => new DatabaseConnection(connectionString));
-    builder.Services.AddTransient(typeof(ConnectionChecker));
-    builder.Services.AddTransient(typeof(AuthenticationRepository));
+    builder.Services.AddTransient<ConnectionChecker>();
+    builder.Services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
 
-    // Migrations runner config
+    // DB Migrations runner config
     builder.Services.AddFluentMigratorCore().ConfigureRunner(r => r
         // .AddMySql5()
         .AddSQLite()

@@ -2,29 +2,27 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebApp.Web.Pages.Shared;
 
 namespace WebApp.Web.Pages;
 
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-public class ErrorModel : PageModel
+public class ErrorModel : BasePageModel
 {
     public string? RequestId { get; set; }
     
-    // The page's ViewData. Injectable for unit testing, of course.
-    private IDictionary<string, object?> _viewData; 
-
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
     public ErrorModel(IDictionary<string, object?>? viewDataDictionary = null)
+    : base(viewDataDictionary)
     {
-        _viewData = viewDataDictionary ?? ViewData;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
     {
         base.OnPageHandlerExecuted(context);
 
-        _viewData["Title"] = "Error";
+        ViewData["Title"] = "Error";
     }
 
     public void OnGet()

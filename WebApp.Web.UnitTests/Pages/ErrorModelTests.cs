@@ -1,6 +1,5 @@
 namespace WebApp.Web.UnitTests;
 
-using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using WebApp.Web.Pages;
 using WebApp.Web.UnitTests.Extensions;
