@@ -29,7 +29,9 @@ Download the following:
 
 Open the source project and press F5 in VS Code; it should run and show the dashboard.
 
-Browse to `/admin/HealthCheck` and verify that the database connection check shows `Successful`.
+Browse to `/admin/HealthCheck` and verify that the database and API connection checks shows `Successful`.
+
+Note that, even though they're separate projects, the API and UI respond to the same port.
 
 Note that we're currently using SQLite to simplify deployment.
 
@@ -38,14 +40,25 @@ Note that we're currently using SQLite to simplify deployment.
 
 - Registration and login
 - Website health check
+- Separate web-based API
 
 # Architecture
 
-History repeats, and so do web architectures. We're back to HTML pages with code-behind. For example, `Register.cshtml` contains the registration form, while `Register.cshtml.cs` contains the code-behind.
+## DB Access in the UI?!
+
+History repeats, and so do web architectures. We're back to HTML pages with code-behind. This is not as bad as it sounds: for simple websites that you need to spin up fast, that need absolutely blazing fast speed, it's faster, easier, and cleaner to simply use this architecture. Deployment is also a snap: there's only the main `WebApp.Web` project that you need to deploy. It doesn't scale well, though, as you are scaling either the entire app stack, or the database.
+
+For an example of this, check the registration and login pages in `WebApp.Web`.  For example, `Register.cshtml` contains the registration form, while `Register.cshtml.cs` contains the code-behind. Both have references to repository instances, which have access to the DB directly.
+
+## A Separate REST API?
+
+If you think you may need to scale up your front-ends and/or back-ends individually, or if you simply prefer a cleaner separation of concerns, you can put your business logic inside the `WebApp.Api` project. This project deploys as a separate (back-end) container, while `WenApp.web` becomes the front-end container.
+
+For an example of this, check the `HealthCheck.cshtml.cs` page. It uses `HttpClient` to make a call to the API to fetch the API's status.
 
 # Running the App via Docker
 
-To run the application via Docker:
+To run the application via Docker (TODO: update this with two-container instructions):
 
 - From a shell, `cd` into `scripts` and run `python .\build_docker_image.py`
 - When the process drops you in the docker container, type `exit`
