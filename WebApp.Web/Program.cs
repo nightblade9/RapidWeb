@@ -71,10 +71,13 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-
         app.UseAuthorization();
-
         app.MapRazorPages();
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        app.MapControllers();
 
         // Run migrations
         using (var migratorScope = app.Services.CreateScope())
