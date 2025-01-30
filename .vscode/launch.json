@@ -1,33 +1,44 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    "compounds": [
+      {
+        "name": "Launch Blazor + API",
+        "configurations": ["Launch Blazor", "Launch API"]
+      }
+    ],
     "configurations": [
-        {
-            "name": ".NET Core Launch (web)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/WebApp.Web/bin/Debug/net8.0/WebApp.Web.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/WebApp.Web",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
+      {
+        "name": "Launch Blazor",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/WebApp.Web/bin/Debug/net8.0/WebApp.Web.dll",
+        "cwd": "${workspaceFolder}/WebApp.Web",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
         },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
         }
+      },
+      {
+        "name": "Launch API",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/WebApp.Api/bin/Debug/net8.0/WebApp.Api.dll",
+        "cwd": "${workspaceFolder}/WebApp.Api",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        },
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      }
     ]
-}
+  }
+  
