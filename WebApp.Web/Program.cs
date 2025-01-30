@@ -33,7 +33,7 @@ public class Program
             services.AddCors();
         }
 
-        // DB config
+        // DB config. TODO: move to API
         var connectionString = builder.Configuration.GetConnectionString("Default");
         {
             if (string.IsNullOrWhiteSpace(connectionString))
@@ -57,6 +57,10 @@ public class Program
                 .AddLogging(l => l.AddFluentMigratorConsole());
         };
 
+        builder.Services.AddHttpClient();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -73,9 +77,6 @@ public class Program
         app.UseRouting();
         app.UseAuthorization();
         app.MapRazorPages();
-
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
 
         app.MapControllers();
 

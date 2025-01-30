@@ -10,12 +10,14 @@ public class HealthCheckModel : BasePageModel
     
     private readonly ILogger<HealthCheckModel> _logger;
     private readonly IConnectionChecker _connectionChecker;
+    private readonly HttpClient _httpClient;
 
-    public HealthCheckModel(ILogger<HealthCheckModel> logger, IConnectionChecker connectionChecker, Dictionary<string, object?> viewData = null)
+    public HealthCheckModel(ILogger<HealthCheckModel> logger, IConnectionChecker connectionChecker, HttpClient httpClient, Dictionary<string, object?> viewData = null)
     : base(viewData)
     {
         _logger = logger;
         _connectionChecker = connectionChecker;
+        _httpClient = httpClient;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -24,9 +26,32 @@ public class HealthCheckModel : BasePageModel
         ViewData["Title"] = "Health Check";
     }
 
-    public async Task OnGet()
+    public void OnGet()
     {
         _logger.LogInformation("Health check invoked at {UtcNow}", DateTime.UtcNow);
-        IsHealthCheckSuccessful["Database Connection"] = await _connectionChecker.CanConnectToDatabase();
+
+        // TODO: use Task.WaitAll instead
+        Task<bool>[] allTasks = [_connectionChecker.CanConnectToDatabase(), IsApiConnectionSuccessful()];
+        Task.WaitAll(allTasks);
+
+        IsHealthCheckSuccessful["Database Connection"] = allTasks[0].Result;
+        IsHealthCheckSuccessful["API Connection"] = allTasks[1].Result;
+    }
+
+    private async Task<bool> IsApiConnectionSuccessful()
+    {
+        bool isApiConnectionSuccessful;
+        try
+        {
+            var apiResponse = await _httpClient.GetAsync("https://localhost:7252/api/healthcheck");
+            isApiConnectionSuccessful = apiResponse.IsSuccessStatusCode;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error calling health-check API");
+            isApiConnectionSuccessful = false;
+        }
+
+        return isApiConnectionSuccessful;
     }
 }
