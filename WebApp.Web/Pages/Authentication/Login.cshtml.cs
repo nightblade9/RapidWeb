@@ -22,7 +22,7 @@ public class LoginModel : BasePageModel
     private readonly IAuthenticationRepository _authRepo;
     private readonly IConfiguration _configuration;
 
-    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo, Dictionary<string, object?>? viewData)
+    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo, Dictionary<string, object?>? viewData = null)
     : base(viewData)
     {
         _logger = logger;

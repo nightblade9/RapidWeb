@@ -7,7 +7,7 @@ public class IndexModel : BasePageModel
 {
     internal readonly IConfiguration Configuration;
 
-    public IndexModel(IConfiguration configuration, Dictionary<string, object?> viewData)
+    public IndexModel(IConfiguration configuration, Dictionary<string, object?> viewData = null)
     : base(viewData)
     {
         Configuration = configuration;
