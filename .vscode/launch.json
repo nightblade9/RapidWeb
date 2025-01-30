@@ -1,14 +1,9 @@
 {
     "version": "0.2.0",
-    "compounds": [
-      {
-        "name": "Launch Blazor + API",
-        "configurations": ["Launch Blazor", "Launch API"]
-      }
-    ],
     "configurations": [
       {
-        "name": "Launch Blazor",
+        // Due to the dependency on the API, launches both!
+        "name": "Launch Blazor + API",
         "type": "coreclr",
         "request": "launch",
         "preLaunchTask": "build",
@@ -24,6 +19,7 @@
         }
       },
       {
+        // Launches *just* the API. Useful for debugging (for now).
         "name": "Launch API",
         "type": "coreclr",
         "request": "launch",
