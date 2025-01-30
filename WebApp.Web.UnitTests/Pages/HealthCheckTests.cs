@@ -16,7 +16,7 @@ public class HealthCheckModelTests
     {
         // Arrange
         var viewData = new Dictionary<string, object?>();
-        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), Substitute.For<IConnectionChecker>(), viewData);
+        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), Substitute.For<IConnectionChecker>(), Substitute.For<IHttpClientFactory>(), viewData);
 
         // Act
         page.OnPageHandlerExecuted(this.CreateContext());
@@ -28,16 +28,16 @@ public class HealthCheckModelTests
     [Test]
     [TestCase(true)]
     [TestCase(false)]
-    public async Task OnGet_SetsHealthChecks(bool expected)
+    public void OnGet_SetsHealthChecks(bool expected)
     {
         // Arrange
         var connectionChecker = Substitute.For<IConnectionChecker>();
         connectionChecker.CanConnectToDatabase().Returns(expected);
 
-        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), connectionChecker);
+        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), connectionChecker, Substitute.For<IHttpClientFactory>());
 
         // Act
-        await page.OnGet();
+        page.OnGet();
 
         // Assert
         Assert.That(page.IsHealthCheckSuccessful["Database Connection"], Is.EqualTo(expected));
