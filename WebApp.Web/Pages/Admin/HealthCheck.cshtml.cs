@@ -10,14 +10,14 @@ public class HealthCheckModel : BasePageModel
     
     private readonly ILogger<HealthCheckModel> _logger;
     private readonly IConnectionChecker _connectionChecker;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public HealthCheckModel(ILogger<HealthCheckModel> logger, IConnectionChecker connectionChecker, HttpClient httpClient, Dictionary<string, object?> viewData = null)
+    public HealthCheckModel(ILogger<HealthCheckModel> logger, IConnectionChecker connectionChecker, IHttpClientFactory httpClientFactory, Dictionary<string, object?> viewData = null)
     : base(viewData)
     {
         _logger = logger;
         _connectionChecker = connectionChecker;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -43,7 +43,8 @@ public class HealthCheckModel : BasePageModel
         bool isApiConnectionSuccessful;
         try
         {
-            var apiResponse = await _httpClient.GetAsync("https://localhost:7252/api/healthcheck");
+            var httpClient = _httpClientFactory.CreateClient();
+            var apiResponse = await httpClient.GetAsync("https://localhost:7252/api/healthcheck");
             isApiConnectionSuccessful = apiResponse.IsSuccessStatusCode;
         }
         catch (Exception e)
