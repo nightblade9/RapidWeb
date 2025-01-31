@@ -1,5 +1,7 @@
 # RapidWeb
 
+[![.NET](https://github.com/nightblade9/RapidWeb/actions/workflows/dotnet.yml/badge.svg)](https://github.com/nightblade9/RapidWeb/actions/workflows/dotnet.yml)
+
 RapidWeb is a quick-start web application, intended as a base template website (just add business logic)!
 
 Features:
