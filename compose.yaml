@@ -1,18 +1,36 @@
+version: '3.8'
+
 services:
-  app:
+  web:
+    build:
+      context: .
+      dockerfile: WebApp.Web/Dockerfile
     image: webapp-web-image:latest
-    command: sh -c "./WebApp.Web"
     ports:
-      - 127.0.0.1:80:8080
-    # ports:
-    #   - 127.0.0.1:3000:3000
-    # working_dir: /WebApp.Web
-    #   - ./:/app
-#     environment:
-#       MYSQL_HOST: mysql
-#       MYSQL_USER: root
-#       MYSQL_PASSWORD: password
-#       MYSQL_DB: webapp
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      - api  # Make sure the API is available first
+    networks:
+      - webapp-network
+
+  api:
+    build:
+      context: .
+      dockerfile: WebApp.Api/Dockerfile
+    image: webapp-api-image:latest
+    ports:
+      - "7145:7145"
+    networks:
+      - webapp-network
+
+networks:
+  webapp-network:
+    driver: bridge
+
+# networks:
+#   default:
+#     driver: bridge
 
 #   mysql:
 #     image: mysql:8.0

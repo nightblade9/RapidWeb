@@ -4,16 +4,16 @@ WORKDIR /src
 
 # Copy solution and project files to restore dependencies
 COPY WebApp.sln .  
-COPY WebApp.Web/WebApp.Web.csproj WebApp.Web/
+COPY WebApp.Api/WebApp.Api.csproj WebApp.Api/
 
 # Restore dependencies
-RUN dotnet restore WebApp.Web/WebApp.Web.csproj
+RUN dotnet restore WebApp.Api/WebApp.Api.csproj
 
 # Copy the entire source code
 COPY . .  
 
 # Publish the app (build and optimize for release)
-WORKDIR /src/WebApp.Web
+WORKDIR /src/WebApp.Api
 RUN dotnet publish -c Release -o /app/publish
 
 # Use .NET runtime image for the final app
@@ -23,9 +23,8 @@ WORKDIR /app
 # Copy the published app from the build-env stage
 COPY --from=build-env /app/publish .
 
-# Expose the ports (adjust based on your actual configuration)
-EXPOSE 5000
-EXPOSE 5001
+# Expose the API ports
+EXPOSE 7145
 
 # Entry point for the application
-ENTRYPOINT ["dotnet", "WebApp.Web.dll"]
+ENTRYPOINT ["dotnet", "WebApp.Api.dll"]
