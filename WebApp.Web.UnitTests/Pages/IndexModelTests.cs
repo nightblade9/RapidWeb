@@ -1,4 +1,4 @@
-namespace WebApp.Web.UnitTests;
+namespace WebApp.Web.UnitTests.Pages;
 
 using Microsoft.Extensions.Configuration;
 using NSubstitute;

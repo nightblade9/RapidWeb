@@ -1,4 +1,4 @@
-namespace WebApp.Web.UnitTests;
+namespace WebApp.Web.UnitTests.Pages.Authentication;
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;

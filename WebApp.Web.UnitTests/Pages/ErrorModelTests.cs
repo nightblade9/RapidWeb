@@ -1,4 +1,4 @@
-namespace WebApp.Web.UnitTests;
+namespace WebApp.Web.UnitTests.Pages;
 
 using NUnit.Framework;
 using WebApp.Web.Pages;

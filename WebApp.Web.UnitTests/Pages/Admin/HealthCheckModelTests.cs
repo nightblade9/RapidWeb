@@ -1,6 +1,5 @@
-namespace WebApp.Web.UnitTests;
+namespace WebApp.Web.UnitTests.Pages.Admin;
 
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;

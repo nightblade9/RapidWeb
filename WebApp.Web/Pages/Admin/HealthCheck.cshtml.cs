@@ -30,7 +30,6 @@ public class HealthCheckModel : BasePageModel
     {
         _logger.LogInformation("Health check invoked at {UtcNow}", DateTime.UtcNow);
 
-        // TODO: use Task.WaitAll instead
         Task<bool>[] allTasks = [_connectionChecker.CanConnectToDatabase(), IsApiConnectionSuccessful()];
         Task.WaitAll(allTasks);
 
