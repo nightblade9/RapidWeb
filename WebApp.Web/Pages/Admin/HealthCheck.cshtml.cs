@@ -44,7 +44,7 @@ public class HealthCheckModel : BasePageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            var apiResponse = await httpClient.GetAsync("https://localhost:7252/api/healthcheck");
+            var apiResponse = await httpClient.GetAsync("https://localhost:7145/api/healthcheck");
             isApiConnectionSuccessful = apiResponse.IsSuccessStatusCode;
         }
         catch (Exception e)
