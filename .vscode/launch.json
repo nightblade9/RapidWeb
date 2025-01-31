@@ -1,40 +1,43 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        // Due to the dependency on the API, launches both!
-        "name": "Launch Blazor + API",
-        "type": "coreclr",
-        "request": "launch",
-        "preLaunchTask": "build",
-        "program": "${workspaceFolder}/WebApp.Web/bin/Debug/net8.0/WebApp.Web.dll",
-        "cwd": "${workspaceFolder}/WebApp.Web",
-        "stopAtEntry": false,
-        "serverReadyAction": {
-          "action": "openExternally",
-          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-        },
-        "env": {
-          "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Launch Blazor + API",
+      "configurations": ["Launch Blazor", "Launch API"]
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Launch Blazor",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/WebApp.Web/bin/Debug/net8.0/WebApp.Web.dll",
+      "cwd": "${workspaceFolder}/WebApp.Web",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       },
-      {
-        // Launches *just* the API. Useful for debugging (for now).
-        "name": "Launch API",
-        "type": "coreclr",
-        "request": "launch",
-        "preLaunchTask": "build",
-        "program": "${workspaceFolder}/WebApp.Api/bin/Debug/net8.0/WebApp.Api.dll",
-        "cwd": "${workspaceFolder}/WebApp.Api",
-        "stopAtEntry": false,
-        "serverReadyAction": {
-          "action": "openExternally",
-          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-        },
-        "env": {
-          "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    ]
-  }
-  
+    },
+    {
+      "name": "Launch API",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/WebApp.Api/bin/Debug/net8.0/WebApp.Api.dll",
+      "cwd": "${workspaceFolder}/WebApp.Api",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  ]
+}

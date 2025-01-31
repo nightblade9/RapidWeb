@@ -1,4 +1,6 @@
 # Ignore files that aren't needed in the Docker image
 .git
-bin
-obj
+bin/
+obj/
+appsettings.Development.json
+appsettings.json

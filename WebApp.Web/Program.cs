@@ -59,7 +59,6 @@ public class Program
 
         builder.Services.AddHttpClient();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 

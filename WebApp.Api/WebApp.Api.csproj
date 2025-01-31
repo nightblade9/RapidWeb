@@ -16,8 +16,4 @@
     <ProjectReference Include="..\WebApp.DataAccess\WebApp.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
