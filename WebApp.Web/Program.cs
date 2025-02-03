@@ -79,7 +79,10 @@ public class Program
                 options.Cookie.SameSite = SameSiteMode.Lax; // Or SameSiteMode.None if you need cross-origin
                 options.Cookie.HttpOnly = true; // Security measure, no JS access
                 options.Cookie.IsEssential = true; // Required for Blazor Server, must be true for session to persist
-                
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);                
+                options.SlidingExpiration = true;                
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Adjust depending on if you're using HTTPS
+
                  // Allow cookies over HTTP in development
                 options.Cookie.SecurePolicy = builder.Environment.IsDevelopment() 
                     ? CookieSecurePolicy.None 
@@ -102,7 +105,6 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-        app.UseAuthorization();
         app.MapRazorPages();
 
         app.MapControllers();
