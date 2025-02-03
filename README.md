@@ -4,7 +4,7 @@ RapidWeb is a quick-start web application, intended as a base template website (
 
 Features:
 - Registration 
-- Authentication 
+- Authentication (login)
 - Deploys to a Docker container
 
 Note that it is NOT production ready; at a minimum, you need to connect to a production-grade database (not a SQLite one).
@@ -67,3 +67,6 @@ Open a browser and browse to `http://localhost:80`. Tada!
 
 Note that we currently use SQLite, to simplify deployment. The DB file persists even when you update the image, as long as you run it in the same container.
 
+# License & Legal Disclaimer
+
+This software is provided *"as is"* without any warranties. By using this software, you agree to the terms outlined in [LICENSE](./LICENSE).
