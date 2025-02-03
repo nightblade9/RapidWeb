@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WebApp.DataAccess.HealthCheck;
 using WebApp.Web.Pages.Shared;
 
 namespace WebApp.Web.Pages;
 
+[Authorize]
 public class HealthCheckModel : BasePageModel
 {
     public Dictionary<string, bool> IsHealthCheckSuccessful { get; private set; } = new();

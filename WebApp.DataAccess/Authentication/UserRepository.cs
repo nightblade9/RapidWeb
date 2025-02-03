@@ -4,11 +4,11 @@ using WebApp.DataAccess.Migration;
 namespace WebApp.DataAccess.Authentication;
 
 [ExcludeFromCodeCoverage]
-public class AuthenticationRepository : IAuthenticationRepository
+public class UserRepository : IUserRepository
 {
     private readonly DatabaseConnection _connection;
 
-    public AuthenticationRepository(DatabaseConnection connection) => _connection = connection;
+    public UserRepository(DatabaseConnection connection) => _connection = connection;
 
     public async Task<bool> IsUserRegistered(string emailAddress)
     {
@@ -29,6 +29,14 @@ public class AuthenticationRepository : IAuthenticationRepository
         var result = await _connection.QuerySingleOrDefaultAsync<string>($"SELECT PasswordHash FROM {TableNames.UsersTableName} WHERE EmailAddress = @email",
            new { email = emailAddress });
 
+        return result;
+    }
+
+    public async Task<ApplicationUser> GetUser(string emailAddress)
+    {
+        var result = await _connection.QuerySingleAsync<ApplicationUser>($"SELECT * FROM {TableNames.UsersTableName} WHERE EmailAddress = @email",
+            new { email = emailAddress });
+        
         return result;
     }
 }

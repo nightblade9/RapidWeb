@@ -1,6 +1,6 @@
 namespace WebApp.DataAccess.Authentication;
 
-public interface IAuthenticationRepository
+public interface IUserRepository
 {
     Task<bool> IsUserRegistered(string emailAddress);
     Task CreateUser(string emailAddress, string ciphertext);
@@ -12,4 +12,6 @@ public interface IAuthenticationRepository
     /// <param name="emailAddress"></param>
     /// <returns></returns>
     Task<string?> GetHashedPassword(string emailAddress);
+
+    Task<ApplicationUser> GetUser(string emailAddress);
 }

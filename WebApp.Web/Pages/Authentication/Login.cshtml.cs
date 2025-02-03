@@ -1,7 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WebApp.DataAccess.Authentication;
+using WebApp.Web.Authentication;
 using WebApp.Web.Pages.Shared;
 using WebAppWeb.Authentication;
 
@@ -19,15 +25,19 @@ public class LoginModel : BasePageModel
     public string Password { get; set; } = default!;
 
     private readonly ILogger<LoginModel> _logger; // security logger
-    private readonly IAuthenticationRepository _authRepo;
+    private readonly IUserRepository _userRepo;
+    private readonly IHttpContextAccessor _httpContext;
     private readonly IConfiguration _configuration;
+    private readonly CustomAuthenticationStateProvider _authStateProvider;
 
-    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IAuthenticationRepository authRepo, Dictionary<string, object?>? viewData = null)
+    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IUserRepository userRepo, IHttpContextAccessor httpContext, AuthenticationStateProvider authStateProvider, Dictionary<string, object?>? viewData = null)
     : base(viewData)
     {
         _logger = logger;
-        _authRepo = authRepo;
+        _userRepo = userRepo;
         _configuration = configuration;
+        _httpContext = httpContext;
+        _authStateProvider = authStateProvider as CustomAuthenticationStateProvider;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -59,7 +69,7 @@ public class LoginModel : BasePageModel
             return Page();
         }
 
-        var passwordHash = await _authRepo.GetHashedPassword(EmailAddress);
+        var passwordHash = await _userRepo.GetHashedPassword(EmailAddress);
         if (string.IsNullOrWhiteSpace(passwordHash))
         {
             _logger.LogInformation("Login attempt for non-existing user {EmailAddress} at {UtcNow}", EmailAddress, DateTime.UtcNow);
@@ -77,9 +87,35 @@ public class LoginModel : BasePageModel
         }
 
         _logger.LogInformation("{EmailAddress} logged in at {UtcNow}", EmailAddress, DateTime.UtcNow);
+
+        await SetUserCookie();
         
-        // TODO: put a viewbag message in
         ViewData["Message"] = "Logged in.";
         return RedirectToPage("/Index");
+    }
+
+    private async Task SetUserCookie()
+    {
+        // Fetch the user's role from the database
+        var user = await _userRepo.GetUser(EmailAddress);
+
+        // Create claims for the user
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, EmailAddress),
+            new Claim(ClaimTypes.Role, user.Role ?? "User") // Default role if none assigned
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+        // Sign in the user
+        _authStateProvider.MarkUserAsAuthenticated(claimsPrincipal);
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
+            new AuthenticationProperties() {
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
+        });
     }
 }

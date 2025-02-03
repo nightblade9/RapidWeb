@@ -31,18 +31,18 @@ public class RegisterModel : BasePageModel
     
     private readonly ILogger<RegisterModel> _logger;
     private readonly IConfiguration _configuration;
-    private readonly IAuthenticationRepository _authRepo;
+    private readonly IUserRepository _userRepo;
 
     public RegisterModel(
         ILogger<RegisterModel> logger,
         IConfiguration configuration,
-        IAuthenticationRepository authRepo,
+        IUserRepository userRepo,
         IDictionary<string, object?>? viewDataDictionary = null)
         : base(viewDataDictionary)
     {
         _logger = logger;
         _configuration = configuration;
-        _authRepo = authRepo;
+        _userRepo = userRepo;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -79,7 +79,7 @@ public class RegisterModel : BasePageModel
             return Page();
         }
 
-        var isUserRegistered = await _authRepo.IsUserRegistered(EmailAddress);
+        var isUserRegistered = await _userRepo.IsUserRegistered(EmailAddress);
         if (isUserRegistered)
         {
             // Since we don't have forget-password functionality, this is an acceptable security trade-off;
@@ -90,7 +90,7 @@ public class RegisterModel : BasePageModel
 
         // Save to DB here
         var passwordHash = PasswordEncrypter.Hash(Password);
-        await _authRepo.CreateUser(EmailAddress, passwordHash);
+        await _userRepo.CreateUser(EmailAddress, passwordHash);
         _logger.LogInformation("{EmailAddress} registered at {UtcNow}", EmailAddress, DateTime.UtcNow);
         // TODO: put a viewbag message in
         return RedirectToPage("/Index");

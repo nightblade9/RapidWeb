@@ -1,9 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
 using FluentMigrator.Runner;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 using WebApp.DataAccess;
 using WebApp.DataAccess.Authentication;
 using WebApp.DataAccess.HealthCheck;
 using WebApp.DataAccess.Migration.Migrations;
+using WebApp.Web.Authentication;
 
 namespace WebApp.Web;
 
@@ -27,11 +30,16 @@ public class Program
             });
         }
 
-        // add services to DI container
+        // Add CORS stuff
         {
             var services = builder.Services;
             services.AddCors();
         }
+
+        // Dependency injection
+        builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+        builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // Must be singleton
 
         // DB config. TODO: move to API
         var connectionString = builder.Configuration.GetConnectionString("Default");
@@ -44,7 +52,7 @@ public class Program
             // Dependency injection for our app
             builder.Services.AddTransient(x => new DatabaseConnection(connectionString));
             builder.Services.AddTransient<IConnectionChecker, ConnectionChecker>();
-            builder.Services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
 
             // DB Migrations runner config
             builder.Services.AddFluentMigratorCore().ConfigureRunner(r => r
@@ -59,6 +67,26 @@ public class Program
 
         builder.Services.AddHttpClient();
         builder.Services.AddEndpointsApiExplorer();
+
+        // Configure authentication
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Login"; // Redirect to login page
+                options.AccessDeniedPath = "/Index"; // Redirect if forbidden
+
+                options.Cookie.Name = "WebApp.Identity"; // Name the cookie
+                options.Cookie.SameSite = SameSiteMode.Lax; // Or SameSiteMode.None if you need cross-origin
+                options.Cookie.HttpOnly = true; // Security measure, no JS access
+                options.Cookie.IsEssential = true; // Required for Blazor Server, must be true for session to persist
+                
+                 // Allow cookies over HTTP in development
+                options.Cookie.SecurePolicy = builder.Environment.IsDevelopment() 
+                    ? CookieSecurePolicy.None 
+                    : CookieSecurePolicy.SameAsRequest;
+            });
+
+        builder.Services.AddAuthorization();
 
         var app = builder.Build();
 
@@ -78,6 +106,10 @@ public class Program
         app.MapRazorPages();
 
         app.MapControllers();
+
+        // Enable authentication and authz
+        app.UseAuthentication();
+        app.UseAuthorization(); // Required for [Authorize] to work
 
         // Run migrations
         using (var migratorScope = app.Services.CreateScope())
