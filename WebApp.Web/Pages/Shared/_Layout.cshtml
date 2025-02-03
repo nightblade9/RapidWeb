@@ -27,6 +27,18 @@
                         </li>
                     </ul>
                 </div>
+                <div>
+                    @{
+                        if (@Context.User.Identity != null && Context.User.Identity.Name != null)
+                        {
+                            <span>Welcome, <string>@Context.User.Identity.Name</string>!</span>
+                        }
+                        else
+                        {
+                            <span><a href="/Login">Login</a></span>
+                        }
+                    }
+                </div>
             </div>
         </nav>
     </header>

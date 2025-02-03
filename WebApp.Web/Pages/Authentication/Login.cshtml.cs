@@ -112,7 +112,7 @@ public class LoginModel : BasePageModel
         // Sign in the user
         _authStateProvider.MarkUserAsAuthenticated(claimsPrincipal);
 
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
+        await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
             new AuthenticationProperties() {
                 IsPersistent = true,
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
