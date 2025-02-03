@@ -3,11 +3,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WebApp.DataAccess.Authentication;
-using WebApp.Web.Authentication;
 using WebApp.Web.Pages.Shared;
 using WebAppWeb.Authentication;
 
@@ -28,16 +26,14 @@ public class LoginModel : BasePageModel
     private readonly IUserRepository _userRepo;
     private readonly IHttpContextAccessor _httpContext;
     private readonly IConfiguration _configuration;
-    private readonly CustomAuthenticationStateProvider _authStateProvider;
 
-    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IUserRepository userRepo, IHttpContextAccessor httpContext, AuthenticationStateProvider authStateProvider, Dictionary<string, object?>? viewData = null)
+    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IUserRepository userRepo, IHttpContextAccessor httpContext, Dictionary<string, object?>? viewData = null)
     : base(viewData)
     {
         _logger = logger;
         _userRepo = userRepo;
         _configuration = configuration;
         _httpContext = httpContext;
-        _authStateProvider = authStateProvider as CustomAuthenticationStateProvider;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -108,9 +104,6 @@ public class LoginModel : BasePageModel
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-        // Sign in the user
-        _authStateProvider.MarkUserAsAuthenticated(claimsPrincipal);
 
         await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
             new AuthenticationProperties() {

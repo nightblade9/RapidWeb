@@ -15,12 +15,12 @@ using WebApp.Web.UnitTests.Stubs;
 [TestFixture]
 public class RegisterModelTests
 {
-    private static RegisterModel CreateRegisterModel(IConfiguration? configuration = null, Dictionary<string, object?>? viewData = null, IAuthenticationRepository authRepo = null)
+    private static RegisterModel CreateRegisterModel(IConfiguration? configuration = null, Dictionary<string, object?>? viewData = null, IUserRepository userRepo = null)
     {
         return new RegisterModel(
             Substitute.For<ILogger<RegisterModel>>(),
             configuration ?? Substitute.For<IConfiguration>(),
-            authRepo ?? new AuthenticationRepositoryStub(),
+            userRepo ?? new UserRepositoryStub(),
             viewData);
     }
 
@@ -99,9 +99,9 @@ public class RegisterModelTests
     public async Task OnPostAsync_ReturnsPageWithModelError_IfUserIsAlreadyRegistered()
     {
         // Arrange
-        var authRepo = Substitute.For<IAuthenticationRepository>();
-        authRepo.IsUserRegistered(Arg.Any<string>()).Returns(true);
-        var page = CreateRegisterModel(this.CreateConfiguration(true), authRepo: authRepo);
+        var userRepo = Substitute.For<IUserRepository>();
+        userRepo.IsUserRegistered(Arg.Any<string>()).Returns(true);
+        var page = CreateRegisterModel(this.CreateConfiguration(true), userRepo: userRepo);
 
         // Act
         var actual = await page.OnPostAsync();
@@ -117,10 +117,10 @@ public class RegisterModelTests
     public async Task OnPostAsync_CreatesUserAndRedirectsToHomePage_IfUserRegistersSuccessfully()
     {
         // Arrange
-        var authRepo = Substitute.For<IAuthenticationRepository>();
-        authRepo.IsUserRegistered(Arg.Any<string>()).Returns(false);
+        var userRepo = Substitute.For<IUserRepository>();
+        userRepo.IsUserRegistered(Arg.Any<string>()).Returns(false);
         
-        var page = CreateRegisterModel(this.CreateConfiguration(true), authRepo: authRepo);
+        var page = CreateRegisterModel(this.CreateConfiguration(true), userRepo: userRepo);
         page.EmailAddress = "test@test.com";
         // Password is too short, but enforcement is configured via attributes, so we can't test/enforce it.
         page.Password = "password";
@@ -133,6 +133,6 @@ public class RegisterModelTests
         Assert.That(actual, Is.InstanceOf<RedirectToPageResult>());
         var modelState = page.ModelState;
         Assert.That(modelState.ErrorCount, Is.EqualTo(0));
-        await authRepo.Received(1).CreateUser(Arg.Any<string>(), Arg.Any<string>());
+        await userRepo.Received(1).CreateUser(Arg.Any<string>(), Arg.Any<string>());
     }
 }

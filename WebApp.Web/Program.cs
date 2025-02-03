@@ -6,7 +6,6 @@ using WebApp.DataAccess;
 using WebApp.DataAccess.Authentication;
 using WebApp.DataAccess.HealthCheck;
 using WebApp.DataAccess.Migration.Migrations;
-using WebApp.Web.Authentication;
 
 namespace WebApp.Web;
 
@@ -37,8 +36,6 @@ public class Program
         }
 
         // Dependency injection
-        builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-        builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // Must be singleton
 
         // DB config. TODO: move to API
@@ -79,7 +76,8 @@ public class Program
                 options.Cookie.SameSite = SameSiteMode.Lax; // Or SameSiteMode.None if you need cross-origin
                 options.Cookie.HttpOnly = true; // Security measure, no JS access
                 options.Cookie.IsEssential = true; // Required for Blazor Server, must be true for session to persist
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);                
+
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);                
                 options.SlidingExpiration = true;                
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Adjust depending on if you're using HTTPS
 

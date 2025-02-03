@@ -1,6 +1,7 @@
 namespace WebApp.Web.UnitTests.Pages.Authentication;
 
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
@@ -16,12 +17,13 @@ using WebAppWeb.Authentication;
 [TestFixture]
 public class LoginModelTests
 {
-    private static LoginModel CreateLoginModel(ILogger<LoginModel>? logger = null, IConfiguration? configuration = null, Dictionary<string, object?>? viewData = null, IAuthenticationRepository authRepo = null)
+    private static LoginModel CreateLoginModel(ILogger<LoginModel>? logger = null, IConfiguration? configuration = null, Dictionary<string, object?>? viewData = null, IUserRepository userRepo = null)
     {
         return new LoginModel(
             logger ?? Substitute.For<ILogger<LoginModel>>(),
             configuration ?? Substitute.For<IConfiguration>(),
-            authRepo ?? new AuthenticationRepositoryStub(),
+            userRepo ?? new UserRepositoryStub(),
+            Substitute.For<IHttpContextAccessor>(),
             viewData);
     }
 
@@ -56,7 +58,7 @@ public class LoginModelTests
     {
         // Arrange
         var viewData = new Dictionary<string, object?>();
-        var page = new LoginModel(Substitute.For<ILogger<LoginModel>>(), Substitute.For<IConfiguration>(), Substitute.For<IAuthenticationRepository>(), viewData);
+        var page = new LoginModel(Substitute.For<ILogger<LoginModel>>(), Substitute.For<IConfiguration>(), Substitute.For<IUserRepository>(),Substitute.For<IHttpContextAccessor>(), viewData);
 
         // Act
         page.OnPageHandlerExecuted(this.CreateContext());
@@ -103,11 +105,11 @@ public class LoginModelTests
         var logger = Substitute.For<ILogger<LoginModel>>();
         var viewData = new Dictionary<string, object?>();
         
-        var authRepo = Substitute.For<IAuthenticationRepository>();
+        var userRepo = Substitute.For<IUserRepository>();
         // Real-looking but fake data, because the code tries to unpack it
-        authRepo.GetHashedPassword(Arg.Any<string>()).Returns("$2a$11$aaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff");
+        userRepo.GetHashedPassword(Arg.Any<string>()).Returns("$2a$11$aaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff");
 
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, authRepo);
+        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, userRepo);
         page.Password = "any wrong password";
 
         // Act
@@ -127,10 +129,20 @@ public class LoginModelTests
         var plaintext = "password";
         var ciphertext = PasswordEncrypter.Hash(plaintext);
         
-        var authRepo = Substitute.For<IAuthenticationRepository>();
-        authRepo.GetHashedPassword(Arg.Any<string>()).Returns(ciphertext);
+        var userRepo = Substitute.For<IUserRepository>();
+        userRepo.GetHashedPassword(Arg.Any<string>()).Returns(ciphertext);
+        var loggedInUser = new ApplicationUser()
+        {
+            Id = 999,
+            PasswordHash = "blah",
+            Role = "grandmaster",
+            UserName = "gm@chess.comz",
+        };
 
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, authRepo);
+        userRepo.GetUser(Arg.Any<string>()).Returns(Task.FromResult(loggedInUser));
+
+        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, userRepo);
+        page.EmailAddress = loggedInUser.UserName;
         page.Password = plaintext;
         // Act
         var actual = await page.OnPostAsync();
