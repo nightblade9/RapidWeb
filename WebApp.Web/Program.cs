@@ -81,7 +81,7 @@ public class Program
 
         builder.Services.AddEndpointsApiExplorer();
 
-        // Configure authentication
+        // Configure authentication for the Web end-points using an authentication cookie
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {

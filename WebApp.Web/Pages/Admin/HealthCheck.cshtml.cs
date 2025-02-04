@@ -13,13 +13,15 @@ public class HealthCheckModel : BasePageModel
     private readonly ILogger<HealthCheckModel> _logger;
     private readonly IConnectionChecker _connectionChecker;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public HealthCheckModel(ILogger<HealthCheckModel> logger, IConnectionChecker connectionChecker, IHttpClientFactory httpClientFactory, Dictionary<string, object?> viewData = null)
+    public HealthCheckModel(ILogger<HealthCheckModel> logger, IConnectionChecker connectionChecker, IHttpClientFactory httpClientFactory, IHttpContextAccessor contextAccessor, Dictionary<string, object?> viewData = null)
     : base(viewData)
     {
         _logger = logger;
         _connectionChecker = connectionChecker;
         _httpClientFactory = httpClientFactory;
+        _contextAccessor = contextAccessor;
     }
 
     public override void OnPageHandlerExecuted(PageHandlerExecutedContext context)
@@ -45,6 +47,14 @@ public class HealthCheckModel : BasePageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient("ApiClient");
+
+            // Get JWT token from cookie and inject it into the correct AUTHORIZATION header
+            var jwtToken = _contextAccessor.HttpContext?.Request.Cookies["ApiAuthToken"];
+            if (!string.IsNullOrEmpty(jwtToken))
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);
+            }
+
             var apiResponse = await httpClient.GetAsync("https://localhost:7145/api/healthcheck");
             isApiConnectionSuccessful = apiResponse.IsSuccessStatusCode;
         }

@@ -1,5 +1,6 @@
 namespace WebApp.Web.UnitTests.Pages.Admin;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ public class HealthCheckModelTests
     {
         // Arrange
         var viewData = new Dictionary<string, object?>();
-        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), Substitute.For<IConnectionChecker>(), Substitute.For<IHttpClientFactory>(), viewData);
+        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), Substitute.For<IConnectionChecker>(), Substitute.For<IHttpClientFactory>(), Substitute.For<IHttpContextAccessor>(), viewData);
 
         // Act
         page.OnPageHandlerExecuted(this.CreateContext());
@@ -33,7 +34,7 @@ public class HealthCheckModelTests
         var connectionChecker = Substitute.For<IConnectionChecker>();
         connectionChecker.CanConnectToDatabase().Returns(expected);
 
-        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), connectionChecker, Substitute.For<IHttpClientFactory>());
+        var page = new HealthCheckModel(Substitute.For<ILogger<HealthCheckModel>>(), connectionChecker, Substitute.For<IHttpClientFactory>(), Substitute.For<IHttpContextAccessor>());
 
         // Act
         page.OnGet();

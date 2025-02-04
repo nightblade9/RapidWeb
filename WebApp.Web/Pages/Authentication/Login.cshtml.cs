@@ -121,11 +121,12 @@ public class LoginModel : BasePageModel
             // Generate a JWT token for API access
             var token = GenerateJwtToken(user, claims);
 
+            // Configure the cookie we return to the browser, with the API authentication token (stored in a cookie).
             _httpContext.HttpContext.Response.Cookies.Append("ApiAuthToken", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.None, // Prevents CSRF
+                SameSite = SameSiteMode.Strict, // Prevents CSRF if set to "Strict"
                 Expires = DateTime.UtcNow.AddMinutes(30)
             });
         }

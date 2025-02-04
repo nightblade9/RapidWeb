@@ -51,15 +51,23 @@ public class Program
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
             };
 
-            // Extract JWT from cookie instead of the Authorization header
+            // Use this code for DEBUGGING authz failures.
             options.Events = new JwtBearerEvents
             {
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine($"Token authentication failed: {context.Exception.Message}");
+                    return Task.CompletedTask;
+                },
                 OnMessageReceived = context =>
                 {
-                    // Check if the request contains the ApiAuthToken cookie
-                    if (context.Request.Cookies.ContainsKey("ApiAuthToken"))
+                    if (context.Request.Headers.ContainsKey("Authorization"))
                     {
-                        context.Token = context.Request.Cookies["ApiAuthToken"];
+                        context.Token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                    }
+                    else if (context.Request.Cookies.ContainsKey("ApiAuthToken"))
+                    {
+                        context.Token = context.Request.Cookies["ApiAuthToken"].ToString().Replace("Bearer ", "");
                     }
                     return Task.CompletedTask;
                 }
