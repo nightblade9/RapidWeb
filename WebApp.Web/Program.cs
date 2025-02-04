@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Net.Http.Headers;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -62,7 +64,21 @@ public class Program
                 .AddLogging(l => l.AddFluentMigratorConsole());
         };
 
-        builder.Services.AddHttpClient();
+        // HTTP clients, for the API, require our cookies.
+        builder.Services.AddHttpClient("ApiClient", client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:7145");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        })
+        .ConfigurePrimaryHttpMessageHandler(() =>
+        {
+            return new HttpClientHandler
+            {
+                UseCookies = true,  // Ensures cookies are automatically sent
+                CookieContainer = new CookieContainer(), // Optional, to manage cookies manually if needed
+            };
+        });
+
         builder.Services.AddEndpointsApiExplorer();
 
         // Configure authentication

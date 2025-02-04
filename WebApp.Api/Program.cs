@@ -50,7 +50,22 @@ public class Program
                 ValidAudience = builder.Configuration["Jwt:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
             };
+
+            // Extract JWT from cookie instead of the Authorization header
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    // Check if the request contains the ApiAuthToken cookie
+                    if (context.Request.Cookies.ContainsKey("ApiAuthToken"))
+                    {
+                        context.Token = context.Request.Cookies["ApiAuthToken"];
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
+
 
         builder.Services.AddAuthorization();
 
