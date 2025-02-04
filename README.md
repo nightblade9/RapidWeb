@@ -40,7 +40,7 @@ Note that we're currently using SQLite to simplify deployment.
 
 # Functionality Included
 
-- Registration and login
+- Registration and login (flow through from UI to API)
 - Website health check
 - Separate web-based API
 
@@ -57,6 +57,13 @@ For an example of this, check the registration and login pages in `WebApp.Web`. 
 If you think you may need to scale up your front-ends and/or back-ends individually, or if you simply prefer a cleaner separation of concerns, you can put your business logic inside the `WebApp.Api` project. This project deploys as a separate (back-end) container, while `WenApp.web` becomes the front-end container.
 
 For an example of this, check the `HealthCheck.cshtml.cs` page. It uses `HttpClient` to make a call to the API to fetch the API's status.
+
+Note that authentication flows through: if you authenticate in the UI:
+
+- It sets a cookie so subsequent UI calls know you're authenticated
+- It creates a JWT token so API calls know you're authenticated
+
+Some custom code takes the JWT token from the user's browser cookie and sets it in the `Authentication` header for API calls.
 
 # Running the App via Docker
 
