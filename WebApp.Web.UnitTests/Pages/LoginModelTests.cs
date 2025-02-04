@@ -17,13 +17,13 @@ using WebAppWeb.Authentication;
 [TestFixture]
 public class LoginModelTests
 {
-    private static LoginModel CreateLoginModel(ILogger<LoginModel>? logger = null, IConfiguration? configuration = null, Dictionary<string, object?>? viewData = null, IUserRepository userRepo = null)
+    private static LoginModel CreateLoginModel(ILogger<LoginModel>? logger = null, IConfiguration? configuration = null, IHttpContextAccessor? contextAccessor = null, Dictionary<string, object?>? viewData = null, IUserRepository userRepo = null)
     {
         return new LoginModel(
             logger ?? Substitute.For<ILogger<LoginModel>>(),
             configuration ?? Substitute.For<IConfiguration>(),
             userRepo ?? new UserRepositoryStub(),
-            Substitute.For<IHttpContextAccessor>(),
+            contextAccessor,
             viewData);
     }
 
@@ -31,7 +31,7 @@ public class LoginModelTests
     public void OnGet_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
     {
         // Arrange
-        var page = CreateLoginModel(configuration: this.CreateConfiguration(false));
+        var page = CreateLoginModel(configuration: this.CreateConfiguration(false), contextAccessor: Substitute.For<IHttpContextAccessor>());
 
         // Act
         var actual = page.OnGet();
@@ -58,7 +58,7 @@ public class LoginModelTests
     {
         // Arrange
         var viewData = new Dictionary<string, object?>();
-        var page = new LoginModel(Substitute.For<ILogger<LoginModel>>(), Substitute.For<IConfiguration>(), Substitute.For<IUserRepository>(),Substitute.For<IHttpContextAccessor>(), viewData);
+        var page = new LoginModel(Substitute.For<ILogger<LoginModel>>(), Substitute.For<IConfiguration>(), Substitute.For<IUserRepository>(), Substitute.For<IHttpContextAccessor>(), viewData);
 
         // Act
         page.OnPageHandlerExecuted(this.CreateContext());
@@ -71,7 +71,7 @@ public class LoginModelTests
     public async Task OnPostAsync_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
     {
         // Arrange
-        var page = CreateLoginModel(configuration: this.CreateConfiguration(false));
+        var page = CreateLoginModel(configuration: this.CreateConfiguration(false), contextAccessor: Substitute.For<IHttpContextAccessor>());
 
         // Act
         var actual = await page.OnPostAsync();
@@ -86,7 +86,7 @@ public class LoginModelTests
         // Arrange
         var logger = Substitute.For<ILogger<LoginModel>>();
         var viewData = new Dictionary<string, object?>();
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData);
+        var page = CreateLoginModel(logger, this.CreateConfiguration(true), null, viewData);
 
         // Act
         var actual = await page.OnPostAsync();
@@ -109,7 +109,7 @@ public class LoginModelTests
         // Real-looking but fake data, because the code tries to unpack it
         userRepo.GetHashedPassword(Arg.Any<string>()).Returns("$2a$11$aaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff");
 
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, userRepo);
+        var page = CreateLoginModel(logger, this.CreateConfiguration(true), null, viewData, userRepo);
         page.Password = "any wrong password";
 
         // Act
@@ -141,9 +141,11 @@ public class LoginModelTests
 
         userRepo.GetUser(Arg.Any<string>()).Returns(Task.FromResult(loggedInUser));
 
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, userRepo);
+        // Null IHttpContextChecker bypasses a context.HttpContext.SignInAsync call that we can't mock and that requires extensive DI to configure it correctly
+        var page = CreateLoginModel(logger, this.CreateConfiguration(true), contextAccessor: null, viewData, userRepo);
         page.EmailAddress = loggedInUser.UserName;
         page.Password = plaintext;
+
         // Act
         var actual = await page.OnPostAsync();
 

@@ -24,7 +24,9 @@ public class LoginModel : BasePageModel
 
     private readonly ILogger<LoginModel> _logger; // security logger
     private readonly IUserRepository _userRepo;
-    private readonly IHttpContextAccessor _httpContext;
+    
+    // Can only be null in unit tests, to bypass untestable code!
+    private readonly IHttpContextAccessor? _httpContext;
     private readonly IConfiguration _configuration;
 
     public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration, IUserRepository userRepo, IHttpContextAccessor httpContext, Dictionary<string, object?>? viewData = null)
@@ -105,10 +107,13 @@ public class LoginModel : BasePageModel
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-        await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
-            new AuthenticationProperties() {
-                IsPersistent = true,
-                ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
-        });
+        if (_httpContext != null)
+        {
+            await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
+                new AuthenticationProperties() {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
+            });
+        }
     }
 }
