@@ -1,4 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApp.Api;
 
@@ -29,6 +32,28 @@ public class Program
 
         builder.Services.AddControllers();
 
+        // Add JWT Authentication
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+            };
+        });
+
+        builder.Services.AddAuthorization();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -43,9 +68,13 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseRouting();
+
+        // Enable Authentication and Authorization Middleware
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
-        app.UseRouting();
+
         // Allow CORS for localhost
         app.UseCors(corsPolicy);
 

@@ -9,10 +9,10 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
 using WebApp.DataAccess.Authentication;
+using WebApp.Shared.Authentication;
 using WebApp.Web.Pages.Authentication;
 using WebApp.Web.UnitTests.Extensions;
 using WebApp.Web.UnitTests.Stubs;
-using WebAppWeb.Authentication;
 
 [TestFixture]
 public class LoginModelTests

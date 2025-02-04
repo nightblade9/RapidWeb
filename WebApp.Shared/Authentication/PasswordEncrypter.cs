@@ -1,4 +1,4 @@
-namespace WebAppWeb.Authentication;
+namespace WebApp.Shared.Authentication;
 
 using BCrypt.Net;
 

@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WebApp.DataAccess.Authentication;
+using WebApp.Shared.Authentication;
 using WebApp.Web.Pages.Shared;
-using WebAppWeb.Authentication;
 
 namespace WebApp.Web.Pages.Authentication;
 

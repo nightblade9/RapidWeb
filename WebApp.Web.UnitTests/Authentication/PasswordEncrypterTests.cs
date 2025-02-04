@@ -1,6 +1,5 @@
-using System;
 using NUnit.Framework;
-using WebAppWeb.Authentication;
+using WebApp.Shared.Authentication;
 
 namespace WebApp.Web.UnitTests.Authentication;
 
