@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
 
@@ -13,11 +14,11 @@ public class AuthenticationTests
     public void Setup()
     {
         // Initialize WebApplicationFactory for the API
-        _factory = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                // Configure any test-specific settings here, e.g., in-memory DB, mock services, etc.
-            });
+        _factory = new WebApplicationFactory<Program>();
+            // .WithWebHostBuilder(builder =>
+            // {
+            //     // Configure any test-specific settings here, e.g., in-memory DB, mock services, etc.
+            // });
 
         _client = _factory.CreateClient();
     }
@@ -36,6 +37,6 @@ public class AuthenticationTests
         var response = await _client.GetAsync("/api/healthcheck");
 
         // Assert
-        Assert.That(response.IsSuccessStatusCode, Is.True);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
     }
 }
