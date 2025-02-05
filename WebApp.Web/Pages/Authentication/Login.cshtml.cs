@@ -119,7 +119,7 @@ public class LoginModel : BasePageModel
             });
                 
             // Generate a JWT token for API access
-            var token = GenerateJwtToken(user, claims);
+            var token = GenerateJwtToken(claims);
 
             // Configure the cookie we return to the browser, with the API authentication token (stored in a cookie).
             _httpContext.HttpContext.Response.Cookies.Append("ApiAuthToken", token, new CookieOptions
@@ -132,7 +132,7 @@ public class LoginModel : BasePageModel
         }
     }
 
-    private string GenerateJwtToken(ApplicationUser user, List<Claim> claims)
+    private string GenerateJwtToken(List<Claim> claims)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
