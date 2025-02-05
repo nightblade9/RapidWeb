@@ -15,11 +15,6 @@ public class AuthenticationTests
     {
         // Initialize WebApplicationFactory for the API
         _factory = new WebApplicationFactory<Program>();
-            // .WithWebHostBuilder(builder =>
-            // {
-            //     // Configure any test-specific settings here, e.g., in-memory DB, mock services, etc.
-            // });
-
         _client = _factory.CreateClient();
     }
 
@@ -31,7 +26,7 @@ public class AuthenticationTests
     }
 
     [Test]
-    public async Task HealthCheck_ReturnsOk()
+    public async Task HealthCheck_ReturnsUnauthorized_IfUserIsNotLoggedIn()
     {
         // Arrange
         var response = await _client.GetAsync("/api/healthcheck");
