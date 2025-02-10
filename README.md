@@ -3,11 +3,12 @@
 RapidWeb is a quick-start web application, intended as a base template website (just add business logic)!
 
 Features:
+- Lightning fast
 - Registration 
 - Authentication (login)
-- Deploys to a Docker container
+- Docker container deployment
 
-Note that it is NOT production ready; at a minimum, you need to connect to a production-grade database (not a SQLite one).
+RapidWeb is highly performant: there are no web APIs to make local network calls to, and the database is embedded. (You can swap out a local non-embedded database, or scale up by connecting multiple instances to the same DB.)
 
 The tech stack:
 
@@ -33,11 +34,6 @@ Browse to `/admin/HealthCheck` and verify that the database connection check sho
 
 Note that we're currently using SQLite to simplify deployment.
 
-
-# Functionality Included
-
-- Registration and login
-- Website health check
 
 # Architecture
 
