@@ -26,32 +26,6 @@ public class LoginModelTests
     }
 
     [Test]
-    public void OnGet_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
-    {
-        // Arrange
-        var page = CreateLoginModel(configuration: this.CreateConfiguration(false));
-
-        // Act
-        var actual = page.OnGet();
-
-        // Assert
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
-    }
-    
-    [Test]
-    public void OnGet_ReturnsPageResult_IfFeatureToggleIsEnabled()
-    {
-        // Arrange
-        var page = CreateLoginModel(configuration: this.CreateConfiguration());
-
-        // Act
-        var actual = page.OnGet();
-
-        // Assert
-        Assert.That(actual, Is.InstanceOf<PageResult>());
-    }
-    
-    [Test]
     public void OnPageHandlerExecuted_SetsTitleInViewData()
     {
         // Arrange
@@ -66,25 +40,12 @@ public class LoginModelTests
     }
 
     [Test]
-    public async Task OnPostAsync_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
-    {
-        // Arrange
-        var page = CreateLoginModel(configuration: this.CreateConfiguration(false));
-
-        // Act
-        var actual = await page.OnPostAsync();
-
-        // Assert
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
-    }
-
-    [Test]
     public async Task OnPostAsync_ReturnsPageResult_IfUserDoesntExist()
     {
         // Arrange
         var logger = Substitute.For<ILogger<LoginModel>>();
         var viewData = new Dictionary<string, object?>();
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData);
+        var page = CreateLoginModel(logger, this.CreateConfiguration(), viewData);
 
         // Act
         var actual = await page.OnPostAsync();
@@ -107,7 +68,7 @@ public class LoginModelTests
         // Real-looking but fake data, because the code tries to unpack it
         authRepo.GetHashedPassword(Arg.Any<string>()).Returns("$2a$11$aaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff");
 
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, authRepo);
+        var page = CreateLoginModel(logger, this.CreateConfiguration(), viewData, authRepo);
         page.Password = "any wrong password";
 
         // Act
@@ -130,7 +91,7 @@ public class LoginModelTests
         var authRepo = Substitute.For<IAuthenticationRepository>();
         authRepo.GetHashedPassword(Arg.Any<string>()).Returns(ciphertext);
 
-        var page = CreateLoginModel(logger, this.CreateConfiguration(true), viewData, authRepo);
+        var page = CreateLoginModel(logger, this.CreateConfiguration(), viewData, authRepo);
         page.Password = plaintext;
         // Act
         var actual = await page.OnPostAsync();

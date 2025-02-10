@@ -53,21 +53,11 @@ public class RegisterModel : BasePageModel
 
     public IActionResult OnGet()
     {
-        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
-        {
-            return NotFound();
-        }
-        
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
-        {
-            return NotFound();
-        }
-
         if (Password != PasswordAgain)
         {
             ModelState.AddModelError(nameof(Password), "Passwords don't match.");

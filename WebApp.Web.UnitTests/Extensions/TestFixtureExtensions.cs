@@ -28,16 +28,10 @@ public static class TestFixtureExtensions
         return toReturn;
     }
 
-    public static IConfiguration CreateConfiguration(this object o, bool isRegistrationFeatureToggleEnabled = true)
+    public static IConfiguration CreateConfiguration(this object o)
     {
-        var configValues = new Dictionary<string, string>
-        {
-            {"FeatureToggles:AllowUserRegistration", isRegistrationFeatureToggleEnabled.ToString() }
-        };
-
         var configuration = new ConfigurationBuilder()
-        .AddInMemoryCollection(configValues)
-        .Build();
+            .Build();
 
         return configuration;
     }

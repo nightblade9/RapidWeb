@@ -38,21 +38,7 @@ public class RegisterModelTests
         Assert.That(viewData["Title"], Is.EqualTo("Register"));
     }
 
-    [Test]
-    public void OnGet_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
-    {
-        // Arrange
-        var page = CreateRegisterModel(this.CreateConfiguration(false));
-
-        // Act
-        var actual = page.OnGet();
-
-        // Assert
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
-    }
-    
-    [Test]
-    public void OnGet_ReturnsPageResult_IfFeatureToggleIsEnabled()
+    public void OnGet_ReturnsPageResult()
     {
         // Arrange
         var page = CreateRegisterModel(this.CreateConfiguration());
@@ -65,23 +51,10 @@ public class RegisterModelTests
     }
 
     [Test]
-    public async Task OnPostAsync_ReturnsNotFoundResult_IfFeatureToggleIsDisabled()
-    {
-        // Arrange
-        var page = CreateRegisterModel(this.CreateConfiguration(false));
-
-        // Act
-        var actual = await page.OnPostAsync();
-
-        // Assert
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
-    }
-
-    [Test]
     public async Task OnPostAsync_ReturnsPageWithModelError_IfPasswordsDontMatch()
     {
         // Arrange
-        var page = CreateRegisterModel(this.CreateConfiguration(true));
+        var page = CreateRegisterModel(this.CreateConfiguration());
         page.Password = "right";
         page.PasswordAgain = "r1gh7";
 
@@ -101,7 +74,7 @@ public class RegisterModelTests
         // Arrange
         var authRepo = Substitute.For<IAuthenticationRepository>();
         authRepo.IsUserRegistered(Arg.Any<string>()).Returns(true);
-        var page = CreateRegisterModel(this.CreateConfiguration(true), authRepo: authRepo);
+        var page = CreateRegisterModel(this.CreateConfiguration(), authRepo: authRepo);
 
         // Act
         var actual = await page.OnPostAsync();
@@ -120,7 +93,7 @@ public class RegisterModelTests
         var authRepo = Substitute.For<IAuthenticationRepository>();
         authRepo.IsUserRegistered(Arg.Any<string>()).Returns(false);
         
-        var page = CreateRegisterModel(this.CreateConfiguration(true), authRepo: authRepo);
+        var page = CreateRegisterModel(this.CreateConfiguration(), authRepo: authRepo);
         page.EmailAddress = "test@test.com";
         // Password is too short, but enforcement is configured via attributes, so we can't test/enforce it.
         page.Password = "password";

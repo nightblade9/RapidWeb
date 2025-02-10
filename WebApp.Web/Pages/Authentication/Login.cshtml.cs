@@ -38,21 +38,11 @@ public class LoginModel : BasePageModel
 
     public IActionResult OnGet()
     {
-        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
-        {
-            return NotFound();
-        }
-
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!_configuration.GetValue<bool>("FeatureToggles:AllowUserRegistration"))
-        {
-            return NotFound();
-        }
-
         if (!ModelState.IsValid)
         {
             ViewData["Message"] = "Please fill out all fields.";
