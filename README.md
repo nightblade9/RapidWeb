@@ -1,6 +1,6 @@
 # RapidWeb
 
-RapidWeb is a quick-start web application, intended as a base template website (just add business logic)!
+RapidWeb is an opinionated, quick-start web application, intended as a base template website (just add business logic)!
 
 Features:
 - Lightning fast
@@ -22,11 +22,6 @@ Download the following:
 
 - .NET 8 SDK
 - Visual Studio Code
-- MySQL 8.0.35 - install:
-    - MySQL Server 8.0.35 (set up the root password to be "password")
-    - MySQL Workbench 8.0.34
-    - Connector/NET 8.0.33.1
-    - Launch the workbench, connect, and create a new schema called `WebApp`
 
 Open the source project and press F5 in VS Code; it should run and show the dashboard.
 
